@@ -1,0 +1,24 @@
+{
+  "name": "vehicle-rental-app-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vehicle-Rental-App/server.git"
+  },
+  "keywords": [],
+  "author": "Farhan Haryawan, Mohammad Fitrah Ramadhan Lamusu, Muhammad Akbar Habiby Khalid",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Vehicle-Rental-App/server/issues"
+  },
+  "homepage": "https://github.com/Vehicle-Rental-App/server#readme",
+  "dependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^8.2.1"
+  }
+}
