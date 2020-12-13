@@ -17,7 +17,8 @@ describe("Test endpoint edit data", () => {
         type: 'Otomatis',
         year: '2019',
         category: 'Mobil Penumpang',
-        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg'
+        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg',
+        vendorId: 1
       }
       Vendor.insertOne(unit)
       .then( data => {
@@ -40,7 +41,8 @@ describe("Test endpoint edit data", () => {
           type: 'Automatic',
           year: '2019',
           category: 'Mobil Penumpang',
-          imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg'
+          imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg',
+          vendorId: 1
         })
         .then( res => {
           const { body, status } = res
@@ -52,6 +54,7 @@ describe("Test endpoint edit data", () => {
           expect(body).to.have.property('year', '2019')
           expect(body).to.have.property('category', 'Mobil Penumpang')
           expect(body).to.have.property('imageUrl', 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg')
+          expect(body).to.have.property('vendorId', 1)
           done()
         })
         .catch(done)
@@ -68,7 +71,8 @@ describe("Test endpoint edit data", () => {
         type: 'Automatic',
         year: '2019',
         category: 'Mobil Penumpang',
-        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg'
+        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg',
+        vendorId: 1
       })
       .then( res => {
         const { body, status } = res
@@ -90,7 +94,8 @@ describe("Test endpoint edit data", () => {
         type: 'Automatic',
         year: '2019',
         category: 'Mobil Penumpang',
-        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg'
+        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg',
+        vendorId: 1
       })
       .then( res => {
         const { body, status } = res
@@ -112,7 +117,8 @@ describe("Test endpoint edit data", () => {
         type: '',
         year: '2019',
         category: 'Mobil Penumpang',
-        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg'
+        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg',
+        vendorId: 1
       })
       .then( res => {
         const { body, status } = res
@@ -134,7 +140,8 @@ describe("Test endpoint edit data", () => {
         type: 'Automatic',
         year: '',
         category: 'Mobil Penumpang',
-        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg'
+        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg',
+        vendorId: 1
       })
       .then( res => {
         const { body, status } = res
@@ -156,7 +163,8 @@ describe("Test endpoint edit data", () => {
         type: 'Automatic',
         year: '2019',
         category: '',
-        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg'
+        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg',
+        vendorId: 1
       })
       .then( res => {
         const { body, status } = res
@@ -178,7 +186,8 @@ describe("Test endpoint edit data", () => {
         type: 'Automatic',
         year: '2019',
         category: 'Car',
-        imageUrl: ''
+        imageUrl: '',
+        vendorId: 1
       })
       .then( res => {
         const { body, status } = res
@@ -200,7 +209,8 @@ describe("Test endpoint edit data", () => {
         type: 'Automatic',
         year: '2019',
         category: 'Mobil penumpang',
-        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg'
+        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg',
+        vendorId: 1
       })
       .then( res => {
         const { body, status } = res
@@ -221,7 +231,8 @@ describe("Test endpoint edit data", () => {
         type: 'Automatic',
         year: '2019',
         category: 'Mobil penumpang',
-        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg'
+        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg',
+        vendorId: 1
       })
       .then( res => {
         const { body, status } = res
@@ -244,7 +255,8 @@ describe("Test endpoint delete data", () => {
         type: 'Manual',
         year: '2018',
         category: 'Mobil Penumpang',
-        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg'
+        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg',
+        vendorId: 1
       }
       Vendor.insertOne(unit)
       .then( data => {
