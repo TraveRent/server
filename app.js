@@ -15,7 +15,7 @@ app.use(cors())
 app.use(routes)
 app.use(errorHandler)
 
-mongoose.connect(process.env.MONGODB_ATLAS_URI_TEST, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
+mongoose.connect(process.env.MONGODB_ATLAS_URI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
   .then(() => {
     // * Send logs
     console.log('mongoose connected into AWS MongoDB Atlas Test Cluster')
