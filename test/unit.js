@@ -285,7 +285,7 @@ describe('Vendor Input Data Unit', () => {
           expect(res).to.have.status(400)
           expect(body).to.be.an('object')
           expect(body).to.have.all.keys('message')
-          expect(body).to.have.property('message', 'Please double check your input and try again...')
+          expect(body).to.have.property('message', 'Input should be a valid URL')
           done()
         })
         .catch(done)
