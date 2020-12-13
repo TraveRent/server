@@ -1,4 +1,5 @@
 const { Schema } = require('mongoose')
+const { isURL } = require('validator')
 
 const unitSchema = new Schema({
   name: {
@@ -20,6 +21,11 @@ const unitSchema = new Schema({
   category: {
     type: String,
     required: [true, 'Category cannot be empty']
+  },
+  imageUrl: {
+    type: String,
+    required: [true, 'ImageURL cannot be empty'],
+    validate: [isURL, 'Input should be a valid URL']
   }
 }, { timestamps: true })
 

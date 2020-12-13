@@ -19,6 +19,8 @@
   "homepage": "https://github.com/Vehicle-Rental-App/server#readme",
   "dependencies": {
     "chai": "^4.2.0",
-    "mocha": "^8.2.1"
+    "mocha": "^8.2.1",
+    "mongoose": "^5.11.7",
+    "validator": "^13.5.2"
   }
 }
