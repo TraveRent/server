@@ -1,326 +1,288 @@
-let chai = require('chai')
-const app = require('../app')
-let chaiHttp = require('chai-http')
-let expect = chai.expect
+require('dotenv').config()
+const chai = require('chai')
+const expect = chai.expect
+const chaiHttp = require('chai-http')
+const app = require('../var/www')
+
+// * Use Chai Plugin
 chai.use(chaiHttp)
 
-let tokenAdmin
-let tokenAdmin1
+// * mongoose
+const { Vendor } = require('../models')
 
-describe("Test endpoint edit data", () => {
-  describe('PUT /vendors/:id', () => {
-    let unitId
-    before((done) => {
-      let unit = {
-        name: 'Mitsubishi Xpander',
-        merk: 'Mitsubishi',
-        type: 'Otomatis',
-        year: '2019',
-        category: 'Mobil Penumpang',
-        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg',
-        vendorId: 1
-      }
-      Vendor.insertOne(unit)
-      .then( data => {
-        unitId = data._id
-        done()
-      })
-      .catch( err => {
-        done(err)
-      })
-    })
-    //Success edit unit
-    it('Test success edit', (done) => {
-      chai
-        .request(app)
-        .put(`/vendors/${unitId}`)
-        .set('accessToken', tokenAdmin)
+// * Create a main vendor for test
+before((done) => {
+  const newVendor = new Vendor({
+    firstName: 'Hacktiv8 Test',
+    lastName: 'Admin',
+    email: 'test@mail.com',
+    password: 'hacktiv8'
+  })
+
+  newVendor.save()
+    .then(done())
+    .catch(done)
+})
+
+// * Cleanup all Vendor
+after((done) => {
+  Vendor.deleteMany({}, (err) => err ? done(err) : done())
+})
+
+// * Vendor Register
+describe('Vendor Register', () => {
+  describe('POST /vendors/register', () => {
+    it('Should be success register', (done) => {
+      chai.request(app)
+        .post('/vendors/register')
         .send({
-          name: 'Mitsubishi Xpander Sport',
-          merk: 'Mitsubishi',
-          type: 'Automatic',
-          year: '2019',
-          category: 'Mobil Penumpang',
-          imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg',
-          vendorId: 1
+          firstName: 'Akbar',
+          lastName: '',
+          email: 'akbarhabiby@icloud.com',
+          password: 'hacktiv8'
         })
-        .then( res => {
-          const { body, status } = res
-          expect(status).to.equal(200)
-          expect(body).to.have.property('_id', expect.any(String))
-          expect(body).to.have.property('name', 'Mitsubishi Xpander Sport')
-          expect(body).to.have.property('merk', 'Mitsubishi')
-          expect(body).to.have.property('type', 'Automatic')
-          expect(body).to.have.property('year', '2019')
-          expect(body).to.have.property('category', 'Mobil Penumpang')
-          expect(body).to.have.property('imageUrl', 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg')
-          expect(body).to.have.property('vendorId', 1)
+        .then(res => {
+          const { body } = res
+          expect(res).to.have.status(201)
+          expect(body).to.be.an('object')
+          expect(body).to.have.all.keys('_id', 'email')
+          expect(body).to.have.property('email', 'akbarhabiby@icloud.com')
           done()
         })
         .catch(done)
     })
 
-    it('Test edit but name is empty', (done) => {
-      chai
-      .request(app)
-      .put(`/vendors/${unitId}`)
-      .set('accessToken', tokenAdmin)
-      .send({
-        name: '',
-        merk: 'Mitsubishi',
-        type: 'Automatic',
-        year: '2019',
-        category: 'Mobil Penumpang',
-        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg',
-        vendorId: 1
-      })
-      .then( res => {
-        const { body, status } = res
-        expect(status).to.equal(400)
-        expect(body).to.have.all.keys("message")
-        done()
-      })
-      .catch(done)
+    it('Should be error if email is already used', (done) => {
+      chai.request(app)
+        .post('/vendors/register')
+        .send({
+          firstName: 'Another Test',
+          lastName: 'Admin Test',
+          email: 'test@mail.com',
+          password: 'hacktiv8'
+        })
+        .then(res => {
+          const { body } = res
+          expect(res).to.have.status(400)
+          expect(body).to.be.an('object')
+          expect(body).to.have.all.keys('message')
+          expect(body).to.have.property('message', 'Oopss.. Email is already taken')
+          done()
+        })
+        .catch(done)
     })
 
-    it('Test edit but merk is empty', (done) => {
-      chai
-      .request(app)
-      .put(`/vendors/${unitId}`)
-      .set('accessToken', tokenAdmin)
-      .send({
-        name: 'Mitsubishi Xpander Sport',
-        merk: '',
-        type: 'Automatic',
-        year: '2019',
-        category: 'Mobil Penumpang',
-        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg',
-        vendorId: 1
-      })
-      .then( res => {
-        const { body, status } = res
-        expect(status).to.equal(400)
-        expect(body).to.have.all.keys("message")
-        done()
-      })
-      .catch(done)
+    it('Should be error if firstName empty', (done) => {
+      chai.request(app)
+        .post('/vendors/register')
+        .send({
+          firstName: '',
+          lastName: 'Habiby',
+          email: 'akbar@mail.com',
+          password: 'hacktiv8'
+        })
+        .then(res => {
+          const { body } = res
+          expect(res).to.have.status(400)
+          expect(body).to.be.an('object')
+          expect(body).to.have.all.keys('message')
+          expect(body).to.have.property('message', 'First name cannot be empty')
+          done()
+        })
+        .catch(done)
     })
 
-    it('Test edit but type is empty', (done) => {
-      chai
-      .request(app)
-      .put(`/vendors/${unitId}`)
-      .set('accessToken', tokenAdmin)
-      .send({
-        name: 'Mitsubishi Xpander Sport',
-        merk: 'Mitsubishi',
-        type: '',
-        year: '2019',
-        category: 'Mobil Penumpang',
-        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg',
-        vendorId: 1
-      })
-      .then( res => {
-        const { body, status } = res
-        expect(status).to.equal(400)
-        expect(body).to.have.all.keys("message")
-        done()
-      })
-      .catch(done)
+    it('Should be error if email is empty', (done) => {
+      chai.request(app)
+        .post('/vendors/register')
+        .send({
+          firstName: 'Akbar',
+          lastName: 'Habiby',
+          email: '',
+          password: 'hacktiv8'
+        })
+        .then(res => {
+          const { body } = res
+          expect(res).to.have.status(400)
+          expect(body).to.be.an('object')
+          expect(body).to.have.all.keys('message')
+          expect(body).to.have.property('message', 'Email cannot be empty')
+          done()
+        })
+        .catch(done)
     })
 
-    it('Test edit but year is empty', (done) => {
-      chai
-      .request(app)
-      .put(`/vendors/${unitId}`)
-      .set('accessToken', tokenAdmin)
-      .send({
-        name: 'Mitsubishi Xpander Sport',
-        merk: 'Mitsubishi',
-        type: 'Automatic',
-        year: '',
-        category: 'Mobil Penumpang',
-        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg',
-        vendorId: 1
-      })
-      .then( res => {
-        const { body, status } = res
-        expect(status).to.equal(400)
-        expect(body).to.have.all.keys("message")
-        done()
-      })
-      .catch(done)
+    it('Should be error if input email is invalid', (done) => {
+      chai.request(app)
+        .post('/vendors/register')
+        .send({
+          firstName: 'Akbar',
+          lastName: 'Habiby',
+          email: 'akbar.com',
+          password: 'hacktiv8'
+        })
+        .then(res => {
+          const { body } = res
+          expect(res).to.have.status(400)
+          expect(body).to.be.an('object')
+          expect(body).to.have.all.keys('message')
+          expect(body).to.have.property('message', 'Input should be an email')
+          done()
+        })
+        .catch(done)
     })
 
-    it('Test edit but category is empty', (done) => {
-      chai
-      .request(app)
-      .put(`/vendors/${unitId}`)
-      .set('accessToken', tokenAdmin)
-      .send({
-        name: 'Mitsubishi Xpander Sport',
-        merk: 'Mitsubishi',
-        type: 'Automatic',
-        year: '2019',
-        category: '',
-        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg',
-        vendorId: 1
-      })
-      .then( res => {
-        const { body, status } = res
-        expect(status).to.equal(400)
-        expect(body).to.have.all.keys("message")
-        done()
-      })
-      .catch(done)
+    it('Should be error if password is empty', (done) => {
+      chai.request(app)
+        .post('/vendors/register')
+        .send({
+          firstName: 'Akbar',
+          lastName: 'Habiby',
+          email: 'akbar@mail.com',
+          password: ''
+        })
+        .then(res => {
+          const { body } = res
+          expect(res).to.have.status(400)
+          expect(body).to.be.an('object')
+          expect(body).to.have.all.keys('message')
+          expect(body).to.have.property('message', 'Password cannot be empty')
+          done()
+        })
+        .catch(done)
     })
 
-    it('Test edit but imgaeUrl is empty', (done) => {
-      chai
-      .request(app)
-      .put(`/vendors/${unitId}`)
-      .set('accessToken', tokenAdmin)
-      .send({
-        name: 'Mitsubishi Xpander Sport',
-        merk: 'Mitsubishi',
-        type: 'Automatic',
-        year: '2019',
-        category: 'Car',
-        imageUrl: '',
-        vendorId: 1
-      })
-      .then( res => {
-        const { body, status } = res
-        expect(status).to.equal(400)
-        expect(body).to.have.all.keys("message")
-        done()
-      })
-      .catch(done)
-    })
-
-    it('Test edit but vendors not authorized', (done) => {
-      chai
-      .request(app)
-      .put(`/vendors/${unitId}`)
-      .set('accessToken', tokenAdmin1)
-      .send({
-        name: 'Mitsubishi Xpander Sport',
-        merk: 'Mitsubishi',
-        type: 'Automatic',
-        year: '2019',
-        category: 'Mobil penumpang',
-        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg',
-        vendorId: 1
-      })
-      .then( res => {
-        const { body, status } = res
-        expect(status).to.equal(401)
-        expect(body).to.have.all.keys("message")
-        done()
-      })
-      .catch(done)
-    })
-
-    it('Test edit but vendors not login', (done) => {
-      chai
-      .request(app)
-      .put(`/vendors/${unitId}`)
-      .send({
-        name: 'Mitsubishi Xpander Sport',
-        merk: 'Mitsubishi',
-        type: 'Automatic',
-        year: '2019',
-        category: 'Mobil penumpang',
-        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg',
-        vendorId: 1
-      })
-      .then( res => {
-        const { body, status } = res
-        expect(status).to.equal(400)
-        expect(body).to.have.all.keys("message")
-        done()
-      })
-      .catch(done)
+    it('Should be error if password length is less than 6', (done) => {
+      chai.request(app)
+        .post('/vendors/register')
+        .send({
+          firstName: 'Akbar',
+          lastName: 'Habiby',
+          email: 'akbar@mail.com',
+          password: 'h8ind'
+        })
+        .then(res => {
+          const { body } = res
+          expect(res).to.have.status(400)
+          expect(body).to.be.an('object')
+          expect(body).to.have.all.keys('message')
+          expect(body).to.have.property('message', 'Passwords must have at least 6 characters')
+          done()
+        })
+        .catch(done)
     })
   })
 })
 
-describe("Test endpoint delete data", () => {
-  describe("DELETE /vendors/:id", () => {
-    let unitId
-    before((done) => {
-      let unit = {
-        name: 'Toyota Rush',
-        merk: 'Toyota',
-        type: 'Manual',
-        year: '2018',
-        category: 'Mobil Penumpang',
-        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg',
-        vendorId: 1
-      }
-      Vendor.insertOne(unit)
-      .then( data => {
-        unitId = data._id
-        done()
-      })
-      .catch( err => {
-        done(err)
-      })
+// * Vendor Login
+describe('Vendor Login', () => {
+  describe('POST /vendors/login', () => {
+    it('Should be success login', (done) => {
+      chai.request(app)
+        .post('/vendors/login')
+        .send({
+          email: 'test@mail.com',
+          password: 'hacktiv8'
+        })
+        .then(res => {
+          const { body } = res
+          expect(res).to.have.status(200)
+          expect(body).to.be.an('object')
+          expect(body).to.have.all.keys('accessToken')
+          expect(body).to.have.property('accessToken')
+          done()
+        })
+        .catch(done)
     })
 
-    it('Test success delete', (done) => {
-      chai
-      .request(app)
-      .delete(`/vendors/${unitId}`)
-      .set('accessToken', tokenAdmin)
-      .then( res => {
-        const { body, status } = res
-        expect(status).to.equal(200)
-        expect(body).to.have.all.keys("message")
-        done()
-      })
-      .catch(done)
+    it('Should be error if email is empty', (done) => {
+      chai.request(app)
+        .post('/vendors/login')
+        .send({
+          email: '',
+          password: 'hacktiv8'
+        })
+        .then(res => {
+          const { body } = res
+          expect(res).to.have.status(400)
+          expect(body).to.be.an('object')
+          expect(body).to.have.all.keys('message')
+          expect(body).to.have.property('message', 'Email cannot be empty')
+          done()
+        })
+        .catch(done)
     })
 
-    it('Test delete but data not found', (done) => {
-      chai
-      .request(app)
-      .delete(`/vendors/100`)
-      .set('accessToken', tokenAdmin)
-      .then( res => {
-        const { body, status } = res
-        expect(status).to.equal(200)
-        expect(body).to.have.all.keys("message")
-        done()
-      })
-      .catch(done)
+    it('Should be error if input email is invalid', (done) => {
+      chai.request(app)
+        .post('/vendors/login')
+        .send({
+          email: 'test.com',
+          password: 'hacktiv8'
+        })
+        .then(res => {
+          const { body } = res
+          expect(res).to.have.status(400)
+          expect(body).to.be.an('object')
+          expect(body).to.have.all.keys('message')
+          expect(body).to.have.property('message', 'Input should be an email')
+          done()
+        })
+        .catch(done)
     })
 
-    it('Test delete but vendors not authorized', (done) => {
-      chai
-      .request(app)
-      .delete(`/vendors/${unitId}`)
-      .set('accessToken', tokenAdmin1)
-      .then( res => {
-        const { body, status } = res
-        expect(status).to.equal(200)
-        expect(body).to.have.all.keys("message")
-        done()
-      })
-      .catch(done)
+    it('Should be error if password is empty', (done) => {
+      chai.request(app)
+        .post('/vendors/login')
+        .send({
+          email: 'test@mail.com',
+          password: ''
+        })
+        .then(res => {
+          const { body } = res
+          expect(res).to.have.status(400)
+          expect(body).to.be.an('object')
+          expect(body).to.have.all.keys('message')
+          expect(body).to.have.property('message', 'Password cannot be empty')
+          done()
+        })
+        .catch(done)
     })
 
-    it('Test delete but vendors not login', (done) => {
-      chai
-      .request(app)
-      .delete(`/vendors/${unitId}`)
-      .then( res => {
-        const { body, status } = res
-        expect(status).to.equal(200)
-        expect(body).to.have.all.keys("message")
-        done()
-      })
-      .catch(done)
-    })  
+    it('Should be error if email is wrong', (done) => {
+      chai.request(app)
+        .post('/vendors/login')
+        .send({
+          email: 'test1337@freemail.com',
+          password: 'hacktiv8'
+        })
+        .then(res => {
+          const { body } = res
+          expect(res).to.have.status(400)
+          expect(body).to.be.an('object')
+          expect(body).to.have.all.keys('message')
+          expect(body).to.have.property('message', 'Wrong email or password')
+          done()
+        })
+        .catch(done)
+    })
+
+    it('Should be error if password is wrong', (done) => {
+      chai.request(app)
+        .post('/vendors/login')
+        .send({
+          email: 'test@mail.com',
+          password: 'hacktiv'
+        })
+        .then(res => {
+          const { body } = res
+          expect(res).to.have.status(400)
+          expect(body).to.be.an('object')
+          expect(body).to.have.all.keys('message')
+          expect(body).to.have.property('message', 'Wrong email or password')
+          done()
+        })
+        .catch(done)
+    })
   })
 })
