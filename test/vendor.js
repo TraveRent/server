@@ -16,7 +16,8 @@ describe("Test endpoint edit data", () => {
         merk: 'Mitsubishi',
         type: 'Otomatis',
         year: '2019',
-        category: 'Mobil Penumpang'
+        category: 'Mobil Penumpang',
+        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg'
       }
       Vendor.insertOne(unit)
       .then( data => {
@@ -38,7 +39,8 @@ describe("Test endpoint edit data", () => {
           merk: 'Mitsubishi',
           type: 'Automatic',
           year: '2019',
-          category: 'Mobil Penumpang'
+          category: 'Mobil Penumpang',
+          imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg'
         })
         .then( res => {
           const { body, status } = res
@@ -49,6 +51,7 @@ describe("Test endpoint edit data", () => {
           expect(body).to.have.property('type', 'Automatic')
           expect(body).to.have.property('year', '2019')
           expect(body).to.have.property('category', 'Mobil Penumpang')
+          expect(body).to.have.property('imageUrl', 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg')
           done()
         })
         .catch(done)
@@ -64,12 +67,13 @@ describe("Test endpoint edit data", () => {
         merk: 'Mitsubishi',
         type: 'Automatic',
         year: '2019',
-        category: 'Mobil Penumpang'
+        category: 'Mobil Penumpang',
+        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg'
       })
       .then( res => {
         const { body, status } = res
         expect(status).to.equal(400)
-        expect(body).to.have.property('message', 'Name cannot be empty')
+        expect(body).to.have.all.keys("message")
         done()
       })
       .catch(done)
@@ -85,12 +89,13 @@ describe("Test endpoint edit data", () => {
         merk: '',
         type: 'Automatic',
         year: '2019',
-        category: 'Mobil Penumpang'
+        category: 'Mobil Penumpang',
+        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg'
       })
       .then( res => {
         const { body, status } = res
         expect(status).to.equal(400)
-        expect(body).to.have.property('message', 'Merk cannot be empty')
+        expect(body).to.have.all.keys("message")
         done()
       })
       .catch(done)
@@ -106,12 +111,13 @@ describe("Test endpoint edit data", () => {
         merk: 'Mitsubishi',
         type: '',
         year: '2019',
-        category: 'Mobil Penumpang'
+        category: 'Mobil Penumpang',
+        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg'
       })
       .then( res => {
         const { body, status } = res
         expect(status).to.equal(400)
-        expect(body).to.have.property('message', 'Type cannot be empty')
+        expect(body).to.have.all.keys("message")
         done()
       })
       .catch(done)
@@ -127,12 +133,13 @@ describe("Test endpoint edit data", () => {
         merk: 'Mitsubishi',
         type: 'Automatic',
         year: '',
-        category: 'Mobil Penumpang'
+        category: 'Mobil Penumpang',
+        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg'
       })
       .then( res => {
         const { body, status } = res
         expect(status).to.equal(400)
-        expect(body).to.have.property('message', 'Year cannot be empty')
+        expect(body).to.have.all.keys("message")
         done()
       })
       .catch(done)
@@ -148,12 +155,35 @@ describe("Test endpoint edit data", () => {
         merk: 'Mitsubishi',
         type: 'Automatic',
         year: '2019',
-        category: ''
+        category: '',
+        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg'
       })
       .then( res => {
         const { body, status } = res
         expect(status).to.equal(400)
-        expect(body).to.have.property('message', 'Category cannot be empty')
+        expect(body).to.have.all.keys("message")
+        done()
+      })
+      .catch(done)
+    })
+
+    it('Test edit but imgaeUrl is empty', (done) => {
+      chai
+      .request(app)
+      .put(`/vendors/${unitId}`)
+      .set('accessToken', tokenAdmin)
+      .send({
+        name: 'Mitsubishi Xpander Sport',
+        merk: 'Mitsubishi',
+        type: 'Automatic',
+        year: '2019',
+        category: 'Car',
+        imageUrl: ''
+      })
+      .then( res => {
+        const { body, status } = res
+        expect(status).to.equal(400)
+        expect(body).to.have.all.keys("message")
         done()
       })
       .catch(done)
@@ -169,12 +199,13 @@ describe("Test endpoint edit data", () => {
         merk: 'Mitsubishi',
         type: 'Automatic',
         year: '2019',
-        category: 'Mobil penumpang'
+        category: 'Mobil penumpang',
+        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg'
       })
       .then( res => {
         const { body, status } = res
         expect(status).to.equal(401)
-        expect(body).to.have.property('message', 'Not authorized')
+        expect(body).to.have.all.keys("message")
         done()
       })
       .catch(done)
@@ -189,12 +220,13 @@ describe("Test endpoint edit data", () => {
         merk: 'Mitsubishi',
         type: 'Automatic',
         year: '2019',
-        category: 'Mobil penumpang'
+        category: 'Mobil penumpang',
+        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg'
       })
       .then( res => {
         const { body, status } = res
         expect(status).to.equal(400)
-        expect(body).to.have.property('message', 'Please login first')
+        expect(body).to.have.all.keys("message")
         done()
       })
       .catch(done)
@@ -211,7 +243,8 @@ describe("Test endpoint delete data", () => {
         merk: 'Toyota',
         type: 'Manual',
         year: '2018',
-        category: 'Mobil Penumpang'
+        category: 'Mobil Penumpang',
+        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg'
       }
       Vendor.insertOne(unit)
       .then( data => {
