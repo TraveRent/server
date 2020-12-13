@@ -20,9 +20,10 @@ class UserController {
         password: password
       })
       const { _id } = await newUser.save()
-      res.status(201).json({ _id, email })
+      res.status(201).json({ _id: _id, email: email })
     } catch (error) {
-      next(error)
+      console.log(error, 'ini di error')
+      // next(error)
     }
   }
 

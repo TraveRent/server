@@ -40,7 +40,7 @@ describe('Vendor Register', () => {
           lastName: '',
           email: 'akbarhabiby@icloud.com',
           password: 'hacktiv8'
-        })
+      })
         .then(res => {
           const { body } = res
           expect(res).to.have.status(201)

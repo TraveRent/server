@@ -1,13 +1,20 @@
+require('dotenv').config()
 const chai = require('chai')
-const app = require('../app')
+const app = require('../var/www')
 const chaiHttp = require('chai-http')
 const expect = chai.expect
 
 chai.use(chaiHttp)
 
+const { User } = require('../models')
+
+after((done) => {
+  User.deleteMany({}, (err) => err ? done(err) : done())
+})
+
 describe("Test User Register", () => {
   describe("POST /users/register", () => {
-    it('User success register', (done) => {
+    it.only('User success register', (done) => {
       chai
       .request(app)
       .post('/users/register')
@@ -20,8 +27,9 @@ describe("Test User Register", () => {
       .then( res => {
         const { body, status } = res
         expect(status).to.equal(201)
-        expect(body).to.have.all.keys('_id')
-        expect(body).to.have.all.keys('email')
+        expect(body).to.be.an('object')
+        expect(body).to.have.all.keys('_id', 'email')
+        expect(body).to.have.property('email', 'farhan@mail.com')
         done()
       })
       .catch(done)
@@ -138,7 +146,7 @@ describe("Test For User Login", () => {
         })
         .then((res) => {
           const { body, status } = res;
-          expect(status).to.have.statusCode(200);
+          expect(status).to.equal(200);
           expect(body).to.be.an("object");
           expext(body).to.have.all.keys("email");
           expect(body).to.have.all.keys("accessToken");
@@ -157,7 +165,7 @@ describe("Test For User Login", () => {
           })
           .then((res) => {
             const { body, status } = res;
-            expect(status).to.have.statusCode(401);
+            expect(status).to.equal(401);
             expect(body).to.have.property("error", "Email cannot be blank");
             done();
           })
@@ -173,7 +181,7 @@ describe("Test For User Login", () => {
           })
           .then((res) => {
             const { body, status } = res;
-            expect(status).to.have.statusCode(401);
+            expect(status).to.equal(401);
             expect(body).to.have.property("error", "Invalid Email");
             done();
           })
@@ -189,7 +197,7 @@ describe("Test For User Login", () => {
           })
           .then((res) => {
             const { body, status } = res;
-            expect(status).to.have.statusCode(401);
+            expect(status).to.equal(401);
             expect(body).to.have.property("error", "Wrong Email");
             done();
           })
@@ -205,7 +213,7 @@ describe("Test For User Login", () => {
           })
           .then((res) => {
             const { body, status } = res;
-            expect(status).to.have.statusCode(401);
+            expect(status).to.equal(401);
             expect(body).to.have.property("error", "Password cannot be blank");
             done();
           })
@@ -221,7 +229,7 @@ describe("Test For User Login", () => {
           })
           .then((res) => {
             const { body, status } = res;
-            expect(status).to.have.statusCode(401);
+            expect(status).to.equal(401);
             expect(body).to.have.property("error", "Wrong password");
             done();
           })

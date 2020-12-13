@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --exit",
+    "test:unit": "mocha ./test/unit.js --exit",
+    "test:user": "mocha ./test/user.js --exit",
+    "test:vendor": "mocha ./test/vendor.js --exit"
   },
   "repository": {
     "type": "git",
