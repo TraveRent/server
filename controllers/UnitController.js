@@ -4,13 +4,15 @@ module.exports = class UnitController {
   static async postAddVendorUnit(req, res, next) {
     try {
       const { name, brand, type, year, category, imageUrl } = req.body
+      const { _id } = req.whoAmI
       const newUnit = new Unit({
         name: name,
         brand: brand,
         type: type,
         year: year,
         category: category,
-        imageUrl: imageUrl
+        imageUrl: imageUrl,
+        vendor: _id
       })
 
       const createdUnit = await newUnit.save()
@@ -21,42 +23,67 @@ module.exports = class UnitController {
     }
   }
 
-  static async getAllUnit(req, res, next) {
+  static async getAllVendorUnit(req, res, next) {
     try {
-      const allUnit = await Unit.find({})
-      res.status(200).json(allUnit)
-    } catch (error) {
-      next(error)
+      const { _id } = req.whoAmI
+      const allUnits = await Unit.find({ vendor: _id }).populate('vendor')
+
+      const results = []
+      allUnits.forEach(unit => {
+        unit.vendor = { _id: unit.vendor._id, email: unit.vendor.email }
+        results.push(unit)
+      })
+
+      res.status(200).json(results)
+    } catch (err) {
+      next(err)
     }
   }
 
-  static async editUnitById(req, res, next) {
+  static async getVendorUnitById(req, res, next) {
     try {
-      const id = req.params.id
+      const { unitId } = req.params
+
+      const unit = await Unit.findById(unitId).populate('vendor')
+      unit.vendor = { _id: unit.vendor._id, email: unit.vendor.email }
+      res.status(200).json(unit)
+    } catch (err) {
+      next(err)
+    }
+  }
+
+  static async putEditVendorUnitById(req, res, next) {
+    try {
+      const { unitId } = req.params
       const { name, brand, type, year, category, imageUrl } = req.body
-      const newUnit = new Unit({
+      if(!name || !brand || !type || !year || !category || !category || !imageUrl)
+        throw new Error('Please complete all forms')
+        
+      const unitAfter = {
         name: name,
         brand: brand,
         type: type,
         year: year,
         category: category,
         imageUrl: imageUrl
-      })
+      }
 
-      const updatedUnit = await Unit.findByIdAndUpdate(id, newUnit, { returnOriginal: false })
-      res.status(200).json(updatedUnit)
-    } catch (error) {
-      next(error)
+      const { n } = await Unit.updateOne({ _id: unitId }, unitAfter, { upsert: false })
+      if(n !== 1) throw new Error('Failed to edit data')
+      res.status(200).json({ message: 'Successfully edit unit with id ' + unitId})
+    } catch (err) {
+      next(err)
     }
   }
 
-  static async deleteUnitById(req, res, next) {
+  static async deleteVendorUnitById(req, res, next) {
     try {
-      const id = req.params.id
-      const deletedUnit = await Unit.findByIdAndDelete(id)
-      res.status(200).json(deletedUnit)
-    } catch (error) {
-      next(error)
+      const { unitId } = req.params
+      const { n } = await Unit.deleteOne({ _id: unitId })
+      if(n !== 1) throw new Error('Failed to delete data')
+      res.status(200).json({ message: 'Successfully delete unit with id ' + unitId})
+    } catch (err) {
+      next(err)
     }
   }
 }
