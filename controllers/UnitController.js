@@ -3,7 +3,7 @@ const { Unit } = require('../models')
 module.exports = class UnitController {
   static async postAddVendorUnit(req, res, next) {
     try {
-      const { name, brand, type, year, category, imageUrl } = req.body
+      const { name, brand, type, year, category, imageUrl, location } = req.body
       const { _id } = req.whoAmI
       const newUnit = new Unit({
         name: name,
@@ -12,6 +12,7 @@ module.exports = class UnitController {
         year: year,
         category: category,
         imageUrl: imageUrl,
+        location: location,
         vendor: _id
       })
 
@@ -55,8 +56,8 @@ module.exports = class UnitController {
   static async putEditVendorUnitById(req, res, next) {
     try {
       const { unitId } = req.params
-      const { name, brand, type, year, category, imageUrl } = req.body
-      if(!name || !brand || !type || !year || !category || !category || !imageUrl)
+      const { name, brand, type, year, category, imageUrl, location } = req.body
+      if(!name || !brand || !type || !year || !category || !category || !imageUrl || !location)
         throw new Error('Please complete all forms')
         
       const unitAfter = {
@@ -65,7 +66,8 @@ module.exports = class UnitController {
         type: type,
         year: year,
         category: category,
-        imageUrl: imageUrl
+        imageUrl: imageUrl,
+        location: location
       }
 
       const { n } = await Unit.updateOne({ _id: unitId }, unitAfter, { upsert: false })

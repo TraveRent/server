@@ -25,7 +25,11 @@ const vendorSchema = new Schema({
     type: String,
     required: [true, 'Password cannot be empty'],
     minlength: [6, 'Passwords must have at least 6 characters']
-  }
+  },
+  units: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Unit'
+  }]
 }, { timestamps: true })
 
 // * Add hooks before validate
