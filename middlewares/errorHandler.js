@@ -38,6 +38,14 @@ module.exports = (err, req, res, next) => {
         message = err.message
         status = 401
         break
+      case 'Please complete all forms':
+        message = err.message
+        status = 400
+        break
+      case 'Unit not found':
+        message = err.message
+        status = 404
+        break
     }
   }
 

@@ -47,7 +47,6 @@ describe("Test User Register", () => {
       })
       .catch(done)
     })
-  })
 
     it('Test register but first name is empty', (done) => {
       chai
@@ -143,6 +142,7 @@ describe("Test User Register", () => {
       })
       .catch(done)
     })
+  })
 })
 
 describe("Test For User Login", () => {

@@ -22,8 +22,7 @@ class UserController {
       const { _id } = await newUser.save()
       res.status(201).json({ _id: _id, email: email })
     } catch (error) {
-      console.log(error, 'ini di error')
-      // next(error)
+      next(error)
     }
   }
 
