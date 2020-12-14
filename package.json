@@ -7,7 +7,9 @@
     "test": "mocha --exit",
     "test:unit": "mocha ./test/unit.js --exit",
     "test:user": "mocha ./test/user.js --exit",
-    "test:vendor": "mocha ./test/vendor.js --exit"
+    "test:vendor": "mocha ./test/vendor.js --exit",
+    "dev": "nodemon app.js",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
