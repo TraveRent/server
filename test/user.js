@@ -8,13 +8,26 @@ chai.use(chaiHttp)
 
 const { User } = require('../models')
 
+before((done) => {
+  const newUser = new User({
+    firstName: 'Test',
+    lastName: 'Login',
+    email: 'ftrahl@gmail.com',
+    password: 'hacktiv8'
+  })
+
+  newUser.save()
+  .then(done())
+  .catch(done)
+})
+
 after((done) => {
   User.deleteMany({}, (err) => err ? done(err) : done())
 })
 
 describe("Test User Register", () => {
   describe("POST /users/register", () => {
-    it.only('User success register', (done) => {
+    it('User success register', (done) => {
       chai
       .request(app)
       .post('/users/register')
@@ -36,7 +49,6 @@ describe("Test User Register", () => {
     })
   })
 
-  describe("POST /users/register", () => {
     it('Test register but first name is empty', (done) => {
       chai
       .request(app)
@@ -131,7 +143,6 @@ describe("Test User Register", () => {
       })
       .catch(done)
     })
-  })
 })
 
 describe("Test For User Login", () => {
@@ -148,13 +159,11 @@ describe("Test For User Login", () => {
           const { body, status } = res;
           expect(status).to.equal(200);
           expect(body).to.be.an("object");
-          expext(body).to.have.all.keys("email");
           expect(body).to.have.all.keys("accessToken");
           done();
         })
         .catch(done);
     });
-    describe("User Login Fails", () => {
       it("User Login with empty email", (done) => {
         chai
           .request(app)
@@ -165,8 +174,8 @@ describe("Test For User Login", () => {
           })
           .then((res) => {
             const { body, status } = res;
-            expect(status).to.equal(401);
-            expect(body).to.have.property("error", "Email cannot be blank");
+            expect(status).to.equal(400);
+            expect(body).to.have.all.keys("message");
             done();
           })
           .catch(done);
@@ -181,8 +190,8 @@ describe("Test For User Login", () => {
           })
           .then((res) => {
             const { body, status } = res;
-            expect(status).to.equal(401);
-            expect(body).to.have.property("error", "Invalid Email");
+            expect(status).to.equal(400);
+            expect(body).to.have.all.keys("message");
             done();
           })
           .catch(done);
@@ -197,8 +206,8 @@ describe("Test For User Login", () => {
           })
           .then((res) => {
             const { body, status } = res;
-            expect(status).to.equal(401);
-            expect(body).to.have.property("error", "Wrong Email");
+            expect(status).to.equal(400);
+            expect(body).to.have.all.keys("message");
             done();
           })
           .catch(done);
@@ -213,8 +222,8 @@ describe("Test For User Login", () => {
           })
           .then((res) => {
             const { body, status } = res;
-            expect(status).to.equal(401);
-            expect(body).to.have.property("error", "Password cannot be blank");
+            expect(status).to.equal(400);
+            expect(body).to.have.all.keys("message");
             done();
           })
           .catch(done);
@@ -229,12 +238,11 @@ describe("Test For User Login", () => {
           })
           .then((res) => {
             const { body, status } = res;
-            expect(status).to.equal(401);
-            expect(body).to.have.property("error", "Wrong password");
+            expect(status).to.equal(400);
+            expect(body).to.have.all.keys("message");
             done();
           })
           .catch(done);
       });
-    });
   });
 });
