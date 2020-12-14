@@ -30,6 +30,10 @@ const unitSchema = new Schema({
   vendor: {
     type: Schema.Types.ObjectId, ref: 'Vendor',
     required: [true, 'Vendor ID is required']
+  },
+  location: {
+    type: String,
+    required: [true, 'Location cannot be empty']
   }
 }, { timestamps: true })
 

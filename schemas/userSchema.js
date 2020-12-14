@@ -25,7 +25,11 @@ const userSchema = new Schema({
     type: String,
     required: [true, 'Password cannot be empty'],
     minlength: [6, 'Password must have at least six characters']
-  }
+  },
+  profiles: [{
+    type: Schema.Types.ObjectId,
+    ref: 'UserProfile'
+  }]
 }, { timestamps: true })
 
 userSchema.pre('validate', function(next) {
