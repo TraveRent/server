@@ -27,13 +27,17 @@ const unitSchema = new Schema({
     required: [true, 'ImageURL cannot be empty'],
     validate: [isURL, 'Input should be a valid URL']
   },
-  vendor: {
-    type: Schema.Types.ObjectId, ref: 'Vendor',
-    required: [true, 'Vendor ID is required']
-  },
   location: {
     type: String,
     required: [true, 'Location cannot be empty']
+  },
+  price: {
+    type: Number,
+    required: [true, 'Price cannot be empty']
+  },
+  vendor: {
+    type: Schema.Types.ObjectId, ref: 'Vendor',
+    required: [true, 'Vendor ID is required']
   }
 }, { timestamps: true })
 
