@@ -46,6 +46,14 @@ module.exports = (err, req, res, next) => {
         message = err.message
         status = 404
         break
+      case 'Failed to upload image':
+        message = err.message
+        status = 406
+        break
+      case 'Invalid Access Token':
+        message = err.message
+        status = 401
+        break
     }
   }
 

@@ -1,19 +1,31 @@
 const { UserProfile } = require('../models')
+const {
+  s3AWSUploadImage
+} = require('../aws')
 
 class UserProfileController {
   static async saveProfile(req, res, next) {
     try {
-      const { fullName, phoneNumber, email, imageKTP, imageSIM } = req.body
-      const { _id } = req.whoAmI
+      const {
+        body: { fullName, phoneNumber, email },
+        files: { imageKTP: [ktp], imageSIM: [sim] },
+        whoAmI: { _id }
+      } = req
+
+      const urlImageKTP = await s3AWSUploadImage(ktp)
+      const urlImageSIM = await s3AWSUploadImage(sim)
+
+      const newFullName = fullName[0].toUpperCase() + fullName.substring(1)
+
       const newProfile = new UserProfile({
-        fullName: fullName,
+        fullName: newFullName,
         phoneNumber: phoneNumber,
         email: email,
-        imageKTP: imageKTP,
-        imageSIM: imageSIM,
+        imageKTP: urlImageKTP,
+        imageSIM: urlImageSIM,
         user: _id
       })
-      // console.log(newProfile)
+
       const createNewProfile = await newProfile.save()
       res.status(201).json(createNewProfile)
     } catch (error) {
