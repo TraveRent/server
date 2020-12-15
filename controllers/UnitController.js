@@ -3,7 +3,7 @@ const { Unit } = require('../models')
 module.exports = class UnitController {
   static async postAddVendorUnit(req, res, next) {
     try {
-      const { name, brand, type, year, category, imageUrl, location } = req.body
+      const { name, brand, type, year, category, imageUrl, location, price } = req.body
       const { _id } = req.whoAmI
       const newUnit = new Unit({
         name: name,
@@ -13,6 +13,7 @@ module.exports = class UnitController {
         category: category,
         imageUrl: imageUrl,
         location: location,
+        price: price,
         vendor: _id
       })
 
