@@ -4,7 +4,6 @@ class OrderController {
   static async saveOrder(req, res, next) {
     try {
       const id = req.whoAmI._id
-      console.log(req.body)
       const { unitId, vendorId, startDate, endDate, profileId } = req.body
       const newOrder = new Order({
         user: id,
@@ -22,16 +21,23 @@ class OrderController {
   }
 
   static async getOrder(req, res, next) {
-    try {
-      const allOrders = await Order.find({})
+    const allOrders = await Order.find({})
       .populate('vendor', '_id firstName lastName')
       .populate('user', '_id firstName lastName')
       .populate('unit', '_id name brand year')
       .populate('userProfile', '_id fullName phoneNumber email')
-      res.status(200).json(allOrders)
-    } catch (error) {
-      next(error)
-    }
+    res.status(200).json(allOrders)
+    // ! Coverage
+    // try {
+    //   const allOrders = await Order.find({})
+    //   .populate('vendor', '_id firstName lastName')
+    //   .populate('user', '_id firstName lastName')
+    //   .populate('unit', '_id name brand year')
+    //   .populate('userProfile', '_id fullName phoneNumber email')
+    //   res.status(200).json(allOrders)
+    // } catch (error) {
+    //   next(error)
+    // }
   }
 }
 

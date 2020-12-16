@@ -62,11 +62,15 @@ module.exports = (err, req, res, next) => {
         message = err.message
         status = 400
         break
+      case 'invalid signature':
+        message = err.message
+        status = 401
+        break
     }
   }
 
   if(err.message.includes('Cast to ObjectId failed')) {
-    message = 'Unit not found'
+    message = 'Data Target not found'
     status = 404
   }
 

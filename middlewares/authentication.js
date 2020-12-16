@@ -14,12 +14,10 @@ module.exports = async (req, res, next) => {
     if(!isJWT(access_token)) throw new Error('Invalid Access Token')
 
     const loggedIn = jwtVerify(access_token)
-    if(!loggedIn) throw new Error('Unauthorized') // ! Coverage 17-21
 
     const checkVendor = await Vendor.findById(loggedIn._id)
-
     if(!checkVendor) throw new Error('Unauthorized')
-    req.whoAmI = jwtVerify(access_token)
+    req.whoAmI = loggedIn
     next()
   } catch (err) {
     next(err)

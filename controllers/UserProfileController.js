@@ -11,7 +11,7 @@ class UserProfileController {
       } = req
 
       if(!imageKTP) throw new Error('Please input your image')
-      if(!imageSIM) throw new Error('Please input your image') // ! ???
+      if(!imageSIM) throw new Error('Please input your image')
 
       const [ktp] = imageKTP
       const [sim] = imageSIM
