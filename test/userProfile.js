@@ -375,7 +375,7 @@ describe('UserProfile Add', () => {
 
     it('Should be error if access_token is not a valid JWT Token', (done) => {
       const newUserProfile = {
-        fullName: '',
+        fullName: 'Muhammad Akbar',
         phoneNumber: '+6281318356925',
         email: 'akbarhabiby@icloud.com'
       }
@@ -401,7 +401,7 @@ describe('UserProfile Add', () => {
 
     it('Should be error if user sent invalid JWT Signature', (done) => {
       const newUserProfile = {
-        fullName: '',
+        fullName: 'Muhammad Akbar',
         phoneNumber: '+6281318356925',
         email: 'akbarhabiby@icloud.com'
       }
@@ -427,7 +427,7 @@ describe('UserProfile Add', () => {
 
     it('Should be error if user sent deleted User Token', (done) => {
       const newUserProfile = {
-        fullName: '',
+        fullName: 'Muhammad Akbar',
         phoneNumber: '+6281318356925',
         email: 'akbarhabiby@icloud.com'
       }
@@ -453,7 +453,7 @@ describe('UserProfile Add', () => {
 
     it('Should be error if user is not login', (done) => {
       const newUserProfile = {
-        fullName: '',
+        fullName: 'Muhammad Akbar',
         phoneNumber: '+6281318356925',
         email: 'akbarhabiby@icloud.com'
       }
