@@ -33,7 +33,7 @@ describe("Test User Register", () => {
       .post('/users/register')
       .send({
         firstName: 'Farhan',
-        lastName: 'Haryawan',
+        lastName: '',
         email: 'farhan@mail.com',
         password: '12345678',
       })
@@ -73,7 +73,7 @@ describe("Test User Register", () => {
       .post('/users/register')
       .send({
         firstName: 'Farhan',
-        lastName: 'Haryawan',
+        lastName: '',
         email: '',
         password: '12345678',
       })
@@ -92,7 +92,7 @@ describe("Test User Register", () => {
       .post('/users/register')
       .send({
         firstName: 'Farhan',
-        lastName: 'Haryawan',
+        lastName: '',
         email: 'farhan@mail.c',
         password: '12345678',
       })
@@ -111,7 +111,7 @@ describe("Test User Register", () => {
       .post('/users/register')
       .send({
         firstName: 'Farhan',
-        lastName: 'Haryawan',
+        lastName: '',
         email: 'farhan@mail.com',
         password: '',
       })
@@ -130,7 +130,7 @@ describe("Test User Register", () => {
       .post('/users/register')
       .send({
         firstName: 'Farhan',
-        lastName: 'Haryawan',
+        lastName: '',
         email: 'farhan@mail.com',
         password: '1234',
       })

@@ -1,6 +1,11 @@
-const { s3AWSUploadImage, uploadMiddleware } = require('./uploadImage')
+const {
+  s3AWSUploadImage,
+  uploadUserProfileMiddleware,
+  uploadVendorUnitMiddleware
+} = require('./uploadImage')
 
 module.exports = {
   s3AWSUploadImage,
-  uploadMiddleware
+  uploadUserProfileMiddleware,
+  uploadVendorUnitMiddleware
 }

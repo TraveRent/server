@@ -16,7 +16,7 @@ module.exports = (err, req, res, next) => {
     status = 400
   }
 
-  if(err.message) {
+  if(err.message) { // ! Coverage ????
     switch(err.message) {
       case 'Wrong email or password':
         message = err.message
@@ -46,15 +46,28 @@ module.exports = (err, req, res, next) => {
         message = err.message
         status = 404
         break
-      case 'Failed to upload image':
-        message = err.message
-        status = 406
-        break
       case 'Invalid Access Token':
         message = err.message
         status = 401
         break
+      case 'File too large':
+        message = err.message
+        status = 413
+        break
+      case `Cannot destructure property 'originalname' of 'undefined' as it is undefined.`:
+        message = 'Please input your image'
+        status = 400
+        break
+      case 'Please input your image':
+        message = err.message
+        status = 400
+        break
     }
+  }
+
+  if(err.message.includes('Cast to ObjectId failed')) {
+    message = 'Unit not found'
+    status = 404
   }
 
   res.status(status).json({ message })

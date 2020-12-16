@@ -10,15 +10,33 @@ const s3 = new AWS.S3({
 })
 
 const storage = multer.memoryStorage({
-  destination: (req, file, callback) => {
-    callback(null, '')
+  destination: function (req, file, callback) {
+    callback(null, '') // ! Coverage ???
   }
 })
 
-const uploadMiddleware = multer({ storage }).fields([{ name: 'imageKTP', maxCount: 1 }, { name: 'imageSIM', maxCount: 1 }])
+const uploadUserProfileMiddleware = multer({
+  storage: storage,
+  limits: {
+    fileSize: 5242880
+  }
+})
+  .fields([
+    { name: 'imageKTP', maxCount: 1 },
+    { name: 'imageSIM', maxCount: 1 }
+  ])
+
+const uploadVendorUnitMiddleware = multer({
+  storage: storage,
+  limits: {
+    fileSize: 5242880
+  }
+})
+  .single('image-unit')
 
 module.exports = {
-  uploadMiddleware: uploadMiddleware,
+  uploadUserProfileMiddleware: uploadUserProfileMiddleware,
+  uploadVendorUnitMiddleware: uploadVendorUnitMiddleware,
   s3AWSUploadImage: ({ originalname, buffer, mimetype }) => {
     return new Promise ((resolve, reject) => {
       const myFile = originalname.split('.')
