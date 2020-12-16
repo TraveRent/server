@@ -3,7 +3,6 @@ const chai = require('chai')
 const expect = chai.expect
 const chaiHttp = require('chai-http')
 const app = require('../var/www')
-const { ObjectId } = require('mongodb')
 
 // * Use Chai Plugin
 chai.use(chaiHttp)

@@ -16,7 +16,8 @@ module.exports = (err, req, res, next) => {
     status = 400
   }
 
-  if(err.message) { // ! Coverage ????
+  /* istanbul ignore next */
+  if(err.message) {
     switch(err.message) {
       case 'Wrong email or password':
         message = err.message
