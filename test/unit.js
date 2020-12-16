@@ -100,7 +100,7 @@ describe('Vendor Input Data Unit', () => {
 
       chai.request(app)
         .post('/units/add')
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .field('name', newUnit.name)
         .field('brand', newUnit.brand)
         .field('type', newUnit.type)
@@ -145,7 +145,7 @@ describe('Vendor Input Data Unit', () => {
 
       chai.request(app)
         .post('/units/add')
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .field('name', newUnit.name)
         .field('brand', newUnit.brand)
         .field('type', newUnit.type)
@@ -178,7 +178,7 @@ describe('Vendor Input Data Unit', () => {
 
       chai.request(app)
         .post('/units/add')
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .field('name', newUnit.name)
         .field('brand', newUnit.brand)
         .field('type', newUnit.type)
@@ -211,7 +211,7 @@ describe('Vendor Input Data Unit', () => {
 
       chai.request(app)
         .post('/units/add')
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .field('name', newUnit.name)
         .field('brand', newUnit.brand)
         .field('type', newUnit.type)
@@ -244,7 +244,7 @@ describe('Vendor Input Data Unit', () => {
 
       chai.request(app)
         .post('/units/add')
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .field('name', newUnit.name)
         .field('brand', newUnit.brand)
         .field('type', newUnit.type)
@@ -277,7 +277,7 @@ describe('Vendor Input Data Unit', () => {
 
       chai.request(app)
         .post('/units/add')
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .field('name', newUnit.name)
         .field('brand', newUnit.brand)
         .field('type', newUnit.type)
@@ -310,7 +310,7 @@ describe('Vendor Input Data Unit', () => {
 
       chai.request(app)
         .post('/units/add')
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .field('name', newUnit.name)
         .field('brand', newUnit.brand)
         .field('type', newUnit.type)
@@ -343,7 +343,7 @@ describe('Vendor Input Data Unit', () => {
 
       chai.request(app)
         .post('/units/add')
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .field('name', newUnit.name)
         .field('brand', newUnit.brand)
         .field('type', newUnit.type)
@@ -375,7 +375,7 @@ describe('Vendor Input Data Unit', () => {
 
       chai.request(app)
         .post('/units/add')
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .field('name', newUnit.name)
         .field('brand', newUnit.brand)
         .field('type', newUnit.type)
@@ -408,7 +408,7 @@ describe('Vendor Input Data Unit', () => {
 
       chai.request(app)
         .post('/units/add')
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .field('name', newUnit.name)
         .field('brand', newUnit.brand)
         .field('type', newUnit.type)
@@ -441,7 +441,7 @@ describe('Vendor Input Data Unit', () => {
 
       chai.request(app)
         .post('/units/add')
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .field('name', newUnit.name)
         .field('brand', newUnit.brand)
         .field('type', newUnit.type)
@@ -461,7 +461,7 @@ describe('Vendor Input Data Unit', () => {
         .catch(done)
     })
 
-    it('Should be error if access_token is not a valid JWT Token', (done) => {
+    it('Should be error if vendor_access_token is not a valid JWT Token', (done) => {
       const newUnit = {
         name: 'Honda Civic Type-R',
         brand: 'Honda',
@@ -474,7 +474,7 @@ describe('Vendor Input Data Unit', () => {
 
       chai.request(app)
         .post('/units/add')
-        .set('access_token', '44219aaaaa2929')
+        .set('vendor_access_token', '44219aaaaa2929')
         .field('name', newUnit.name)
         .field('brand', newUnit.brand)
         .field('type', newUnit.type)
@@ -507,7 +507,7 @@ describe('Vendor Input Data Unit', () => {
 
       chai.request(app)
         .post('/units/add')
-        .set('access_token', localStorage.invalidSecretToken)
+        .set('vendor_access_token', localStorage.invalidSecretToken)
         .field('name', newUnit.name)
         .field('brand', newUnit.brand)
         .field('type', newUnit.type)
@@ -540,7 +540,7 @@ describe('Vendor Input Data Unit', () => {
 
       chai.request(app)
         .post('/units/add')
-        .set('access_token', localStorage.expiredToken)
+        .set('vendor_access_token', localStorage.expiredToken)
         .field('name', newUnit.name)
         .field('brand', newUnit.brand)
         .field('type', newUnit.type)
@@ -601,7 +601,7 @@ describe("Test endpoint edit data", () => {
       chai
         .request(app)
         .put(`/units/${unitId}`)
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .send({
           name: 'Mitsubishi Xpander Sport',
           brand: 'Mitsubishi',
@@ -626,7 +626,7 @@ describe("Test endpoint edit data", () => {
       chai
       .request(app)
       .put(`/units/${unitId}`)
-      .set('access_token', localStorage.accessToken)
+      .set('vendor_access_token', localStorage.accessToken)
       .send({
         name: '',
         brand: 'Mitsubishi',
@@ -651,7 +651,7 @@ describe("Test endpoint edit data", () => {
       chai
       .request(app)
       .put(`/units/${unitId}`)
-      .set('access_token', localStorage.accessToken)
+      .set('vendor_access_token', localStorage.accessToken)
       .send({
         name: 'Mitsubishi Xpander Sport',
         brand: '',
@@ -676,7 +676,7 @@ describe("Test endpoint edit data", () => {
       chai
       .request(app)
       .put(`/units/${unitId}`)
-      .set('access_token', localStorage.accessToken)
+      .set('vendor_access_token', localStorage.accessToken)
       .send({
         name: 'Mitsubishi Xpander Sport',
         brand: 'Mitsubishi',
@@ -701,7 +701,7 @@ describe("Test endpoint edit data", () => {
       chai
       .request(app)
       .put(`/units/${unitId}`)
-      .set('access_token', localStorage.accessToken)
+      .set('vendor_access_token', localStorage.accessToken)
       .send({
         name: 'Mitsubishi Xpander Sport',
         brand: 'Mitsubishi',
@@ -726,7 +726,7 @@ describe("Test endpoint edit data", () => {
       chai
       .request(app)
       .put(`/units/${unitId}`)
-      .set('access_token', localStorage.accessToken)
+      .set('vendor_access_token', localStorage.accessToken)
       .send({
         name: 'Mitsubishi Xpander Sport',
         brand: 'Mitsubishi',
@@ -751,7 +751,7 @@ describe("Test endpoint edit data", () => {
       chai
       .request(app)
       .put(`/units/${unitId}`)
-      .set('access_token', localStorage.accessToken)
+      .set('vendor_access_token', localStorage.accessToken)
       .send({
         name: 'Mitsubishi Xpander Sport',
         brand: 'Mitsubishi',
@@ -774,7 +774,7 @@ describe("Test endpoint edit data", () => {
       chai
       .request(app)
       .put(`/units/${unitId}`)
-      .set('access_token', localStorage.randomToken)
+      .set('vendor_access_token', localStorage.randomToken)
       .send({
         name: 'Mitsubishi Xpander Sport',
         brand: 'Mitsubishi',
@@ -826,7 +826,7 @@ describe('Vendor GET Unit', () => {
     it('Should be GET All Vendor Units', (done) => {
       chai.request(app)
         .get('/units')
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .then(res => {
           const { body, status } = res
           expect(status).to.equal(200)
@@ -841,7 +841,7 @@ describe('Vendor GET Unit', () => {
     it('Should be GET one Vendor Unit', (done) => {
       chai.request(app)
         .get(`/units/${unitId}`)
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .then(res => {
           const { body, status } = res
           expect(status).to.equal(200)
@@ -866,7 +866,7 @@ describe('Vendor GET Unit', () => {
     it('Should be error if unitId is not found', (done) => {
       chai.request(app)
         .get(`/units/5fd619e21b639001ce2cd57f`)
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .then(res => {
           const { body, status } = res
           expect(status).to.equal(404)
@@ -881,7 +881,7 @@ describe('Vendor GET Unit', () => {
     it('Should be error if unitId is not a valid objectId', (done) => {
       chai.request(app)
         .get(`/units/412421aaa`)
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .then(res => {
           const { body, status } = res
           expect(status).to.equal(404)
@@ -902,7 +902,7 @@ describe("Test endpoint delete data", () => {
       chai
       .request(app)
       .delete(`/units/5fd71bda92d52a22b9de4b1f`)
-      .set('access_token', localStorage.accessToken)
+      .set('vendor_access_token', localStorage.accessToken)
       .then(res => {
         const { body, status } = res
         expect(status).to.equal(404)
@@ -917,7 +917,7 @@ describe("Test endpoint delete data", () => {
       chai
       .request(app)
       .delete(`/units/${unitId}`)
-      .set('access_token', localStorage.randomToken)
+      .set('vendor_access_token', localStorage.randomToken)
       .then(res => {
         const { body, status } = res
         expect(status).to.equal(401)
@@ -945,7 +945,7 @@ describe("Test endpoint delete data", () => {
       chai
       .request(app)
       .delete(`/units/${unitId}`)
-      .set('access_token', localStorage.accessToken)
+      .set('vendor_access_token', localStorage.accessToken)
       .then(res => {
         const { body, status } = res
         expect(status).to.equal(200)
