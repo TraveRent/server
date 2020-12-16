@@ -70,7 +70,7 @@ module.exports = (err, req, res, next) => {
   }
 
   if(err.message.includes('Cast to ObjectId failed')) {
-    message = 'Unit not found'
+    message = 'Data Target not found'
     status = 404
   }
 

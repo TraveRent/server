@@ -44,7 +44,7 @@ module.exports = {
         Body: buffer,
         ContentType: mimetype
       }, (err, { Location }) => {
-        if(err) return reject(new Error('Failed to upload image')) // * Never reach this case
+        // if(err) return reject(new Error('Failed to upload image')) // * Never reach this case
         resolve(Location)
       })
     })

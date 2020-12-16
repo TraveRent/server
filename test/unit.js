@@ -887,7 +887,7 @@ describe('Vendor GET Unit', () => {
           expect(status).to.equal(404)
           expect(body).to.be.an('object')
           expect(body).to.have.all.keys('message')
-          expect(body).to.have.property('message', 'Unit not found')
+          expect(body).to.have.property('message', 'Data Target not found')
           done()
         })
         .catch(done)
