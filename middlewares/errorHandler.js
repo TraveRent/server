@@ -62,6 +62,10 @@ module.exports = (err, req, res, next) => {
         message = err.message
         status = 400
         break
+      case 'invalid signature':
+        message = err.message
+        status = 401
+        break
     }
   }
 
