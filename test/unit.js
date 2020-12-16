@@ -3,6 +3,8 @@ const chai = require('chai')
 const expect = chai.expect
 const chaiHttp = require('chai-http')
 const app = require('../var/www')
+const fs = require('fs')
+const path = require('path')
 const {
   jsonwebtoken: {
     jwtSign
@@ -42,7 +44,7 @@ before((done) => {
   newVendor.save()
     .then(({ _id }) => {
       vendorId = _id
-      localStorage.accessToken = jwtSign({ _id:_id, email: 'unittest@mail.com' })
+      localStorage.accessToken = jwtSign({ _id: _id, email: 'unittest@mail.com' })
       return anotherVendor.save()
     })
     .then(({ _id }) => {
@@ -55,6 +57,8 @@ before((done) => {
         year: '2019',
         category: 'Mobil Penumpang',
         imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg',
+        price: '90000000',
+        location: 'Jakarta',
         vendor: vendorId
       })
 
@@ -88,19 +92,27 @@ describe('Vendor Input Data Unit', () => {
         type: 'Civic Type-R',
         year: '2020',
         category: 'Mobil Pribadi',
-        imageUrl: 'https://imgx.gridoto.com/crop/0x0:0x0/700x465/filters:watermark(file/2017/gridoto/img/watermark_otoseken.png,5,5,60)/photo/2020/02/13/456583938.jpeg'
+        price: '90000000',
+        location: 'Jakarta'
       }
 
       chai.request(app)
         .post('/units/add')
         .set('access_token', localStorage.accessToken)
-        .send(newUnit)
+        .field('name', newUnit.name)
+        .field('brand', newUnit.brand)
+        .field('type', newUnit.type)
+        .field('year', newUnit.year)
+        .field('category', newUnit.category)
+        .field('price', newUnit.price)
+        .field('location', newUnit.location)
+        .attach('image-unit', fs.readFileSync(path.join(__dirname + '/img/car-test.jpg')), 'car-test.jpg')
         .then(res => {
           const { body } = res
           const { year } = body
           expect(res).to.have.status(201)
           expect(body).to.be.an('object')
-          expect(body).to.have.all.keys('_id', 'name', 'brand', 'type', 'year', 'category', 'imageUrl', 'vendor', 'createdAt', 'updatedAt', '__v')
+          expect(body).to.have.all.keys('_id', 'name', 'brand', 'type', 'year', 'category', 'imageUrl', 'vendor', 'price', 'location', 'createdAt', 'updatedAt', '__v')
           expect(body).to.have.property('_id')
           expect(body).to.have.property('name', newUnit.name)
           expect(body).to.have.property('brand', newUnit.brand)
@@ -108,7 +120,7 @@ describe('Vendor Input Data Unit', () => {
           expect(year).to.equal(2020)
           expect(body).to.have.property('year', +newUnit.year)
           expect(body).to.have.property('category', newUnit.category)
-          expect(body).to.have.property('imageUrl', newUnit.imageUrl)
+          expect(body).to.have.property('imageUrl')
           expect(body).to.have.property('vendor')
           expect(body).to.have.property('createdAt')
           expect(body).to.have.property('updatedAt')
@@ -125,13 +137,21 @@ describe('Vendor Input Data Unit', () => {
         type: 'Civic Type-R',
         year: '2020',
         category: 'Mobil Pribadi',
-        imageUrl: 'https://imgx.gridoto.com/crop/0x0:0x0/700x465/filters:watermark(file/2017/gridoto/img/watermark_otoseken.png,5,5,60)/photo/2020/02/13/456583938.jpeg'
+        price: '90000000',
+        location: 'Jakarta'
       }
 
       chai.request(app)
         .post('/units/add')
         .set('access_token', localStorage.accessToken)
-        .send(newUnit)
+        .field('name', newUnit.name)
+        .field('brand', newUnit.brand)
+        .field('type', newUnit.type)
+        .field('year', newUnit.year)
+        .field('category', newUnit.category)
+        .field('price', newUnit.price)
+        .field('location', newUnit.location)
+        .attach('image-unit', fs.readFileSync(path.join(__dirname + '/img/car-test.jpg')), 'car-test.jpg')
         .then(res => {
           const { body } = res
           expect(res).to.have.status(400)
@@ -150,13 +170,21 @@ describe('Vendor Input Data Unit', () => {
         type: 'Civic Type-R',
         year: '2020',
         category: 'Mobil Pribadi',
-        imageUrl: 'https://imgx.gridoto.com/crop/0x0:0x0/700x465/filters:watermark(file/2017/gridoto/img/watermark_otoseken.png,5,5,60)/photo/2020/02/13/456583938.jpeg'
+        price: '90000000',
+        location: 'Jakarta'
       }
 
       chai.request(app)
         .post('/units/add')
         .set('access_token', localStorage.accessToken)
-        .send(newUnit)
+        .field('name', newUnit.name)
+        .field('brand', newUnit.brand)
+        .field('type', newUnit.type)
+        .field('year', newUnit.year)
+        .field('category', newUnit.category)
+        .field('price', newUnit.price)
+        .field('location', newUnit.location)
+        .attach('image-unit', fs.readFileSync(path.join(__dirname + '/img/car-test.jpg')), 'car-test.jpg')
         .then(res => {
           const { body } = res
           expect(res).to.have.status(400)
@@ -175,13 +203,21 @@ describe('Vendor Input Data Unit', () => {
         type: '',
         year: '2020',
         category: 'Mobil Pribadi',
-        imageUrl: 'https://imgx.gridoto.com/crop/0x0:0x0/700x465/filters:watermark(file/2017/gridoto/img/watermark_otoseken.png,5,5,60)/photo/2020/02/13/456583938.jpeg'
+        price: '90000000',
+        location: 'Jakarta'
       }
 
       chai.request(app)
         .post('/units/add')
         .set('access_token', localStorage.accessToken)
-        .send(newUnit)
+        .field('name', newUnit.name)
+        .field('brand', newUnit.brand)
+        .field('type', newUnit.type)
+        .field('year', newUnit.year)
+        .field('category', newUnit.category)
+        .field('price', newUnit.price)
+        .field('location', newUnit.location)
+        .attach('image-unit', fs.readFileSync(path.join(__dirname + '/img/car-test.jpg')), 'car-test.jpg')
         .then(res => {
           const { body } = res
           expect(res).to.have.status(400)
@@ -200,13 +236,21 @@ describe('Vendor Input Data Unit', () => {
         type: 'Civic Type-R',
         year: '',
         category: 'Mobil Pribadi',
-        imageUrl: 'https://imgx.gridoto.com/crop/0x0:0x0/700x465/filters:watermark(file/2017/gridoto/img/watermark_otoseken.png,5,5,60)/photo/2020/02/13/456583938.jpeg'
+        price: '90000000',
+        location: 'Jakarta'
       }
 
       chai.request(app)
         .post('/units/add')
         .set('access_token', localStorage.accessToken)
-        .send(newUnit)
+        .field('name', newUnit.name)
+        .field('brand', newUnit.brand)
+        .field('type', newUnit.type)
+        .field('year', newUnit.year)
+        .field('category', newUnit.category)
+        .field('price', newUnit.price)
+        .field('location', newUnit.location)
+        .attach('image-unit', fs.readFileSync(path.join(__dirname + '/img/car-test.jpg')), 'car-test.jpg')
         .then(res => {
           const { body } = res
           expect(res).to.have.status(400)
@@ -218,20 +262,28 @@ describe('Vendor Input Data Unit', () => {
         .catch(done)
     })
 
-    it('Should be error if type of unit is not a number', (done) => {
+    it('Should be error if year of unit is not a number', (done) => {
       const newUnit = {
         name: 'Honda Civic Type-R',
         brand: 'Honda',
         type: 'Civic Type-R',
         year: 'two thousand eight',
         category: 'Mobil Pribadi',
-        imageUrl: 'https://imgx.gridoto.com/crop/0x0:0x0/700x465/filters:watermark(file/2017/gridoto/img/watermark_otoseken.png,5,5,60)/photo/2020/02/13/456583938.jpeg'
+        price: '90000000',
+        location: 'Jakarta'
       }
 
       chai.request(app)
         .post('/units/add')
         .set('access_token', localStorage.accessToken)
-        .send(newUnit)
+        .field('name', newUnit.name)
+        .field('brand', newUnit.brand)
+        .field('type', newUnit.type)
+        .field('year', newUnit.year)
+        .field('category', newUnit.category)
+        .field('price', newUnit.price)
+        .field('location', newUnit.location)
+        .attach('image-unit', fs.readFileSync(path.join(__dirname + '/img/car-test.jpg')), 'car-test.jpg')
         .then(res => {
           const { body } = res
           expect(res).to.have.status(400)
@@ -250,13 +302,21 @@ describe('Vendor Input Data Unit', () => {
         type: 'Civic Type-R',
         year: '2020',
         category: '',
-        imageUrl: 'https://imgx.gridoto.com/crop/0x0:0x0/700x465/filters:watermark(file/2017/gridoto/img/watermark_otoseken.png,5,5,60)/photo/2020/02/13/456583938.jpeg'
+        price: '90000000',
+        location: 'Jakarta'
       }
 
       chai.request(app)
         .post('/units/add')
         .set('access_token', localStorage.accessToken)
-        .send(newUnit)
+        .field('name', newUnit.name)
+        .field('brand', newUnit.brand)
+        .field('type', newUnit.type)
+        .field('year', newUnit.year)
+        .field('category', newUnit.category)
+        .field('price', newUnit.price)
+        .field('location', newUnit.location)
+        .attach('image-unit', fs.readFileSync(path.join(__dirname + '/img/car-test.jpg')), 'car-test.jpg')
         .then(res => {
           const { body } = res
           expect(res).to.have.status(400)
@@ -268,53 +328,165 @@ describe('Vendor Input Data Unit', () => {
         .catch(done)
     })
 
-    it('Should be error if imageUrl is empty', (done) => {
+    it('Should be error if imageFile is empty', (done) => {
       const newUnit = {
         name: 'Honda Civic Type-R',
         brand: 'Honda',
         type: 'Civic Type-R',
         year: '2020',
         category: 'Mobil Pribadi',
-        imageUrl: ''
+        price: '90000000',
+        location: 'Jakarta'
       }
 
       chai.request(app)
         .post('/units/add')
         .set('access_token', localStorage.accessToken)
-        .send(newUnit)
+        .field('name', newUnit.name)
+        .field('brand', newUnit.brand)
+        .field('type', newUnit.type)
+        .field('year', newUnit.year)
+        .field('category', newUnit.category)
+        .field('price', newUnit.price)
+        .field('location', newUnit.location)
         .then(res => {
-          // * Your code here
           const { body } = res
           expect(res).to.have.status(400)
           expect(body).to.be.an('object')
           expect(body).to.have.all.keys('message')
-          expect(body).to.have.property('message', 'ImageURL cannot be empty')
+          expect(body).to.have.property('message', 'Please input your image')
           done()
         })
         .catch(done)
     })
 
-    it('Should be error if input imageUrl is invalid', (done) => {
+    it('Should be error if image filesize is too large', (done) => {
       const newUnit = {
         name: 'Honda Civic Type-R',
         brand: 'Honda',
         type: 'Civic Type-R',
         year: '2020',
         category: 'Mobil Pribadi',
-        imageUrl: 'imagejpg'
+        price: '90000000',
+        location: 'Jakarta'
       }
 
       chai.request(app)
         .post('/units/add')
         .set('access_token', localStorage.accessToken)
-        .send(newUnit)
+        .field('name', newUnit.name)
+        .field('brand', newUnit.brand)
+        .field('type', newUnit.type)
+        .field('year', newUnit.year)
+        .field('category', newUnit.category)
+        .field('price', newUnit.price)
+        .field('location', newUnit.location)
+        .attach('image-unit', fs.readFileSync(path.join(__dirname + '/img/10mb.jpg')), '10mb.jpg')
         .then(res => {
-          // * Your code here
+          const { body } = res
+          expect(res).to.have.status(413)
+          expect(body).to.be.an('object')
+          expect(body).to.have.all.keys('message')
+          expect(body).to.have.property('message', 'File too large')
+          done()
+        })
+        .catch(done)
+    })
+
+    it('Should be error if price is empty', (done) => {
+      const newUnit = {
+        name: 'Honda Civic Type-R',
+        brand: 'Honda',
+        type: 'Civic Type-R',
+        year: '2020',
+        category: 'Mobil Pribadi',
+        price: '',
+        location: 'Jakarta'
+      }
+
+      chai.request(app)
+        .post('/units/add')
+        .set('access_token', localStorage.accessToken)
+        .field('name', newUnit.name)
+        .field('brand', newUnit.brand)
+        .field('type', newUnit.type)
+        .field('year', newUnit.year)
+        .field('category', newUnit.category)
+        .field('price', newUnit.price)
+        .field('location', newUnit.location)
+        .attach('image-unit', fs.readFileSync(path.join(__dirname + '/img/car-test.jpg')), 'car-test.jpg')
+        .then(res => {
           const { body } = res
           expect(res).to.have.status(400)
           expect(body).to.be.an('object')
           expect(body).to.have.all.keys('message')
-          expect(body).to.have.property('message', 'Input should be a valid URL')
+          expect(body).to.have.property('message', 'Price cannot be empty')
+          done()
+        })
+        .catch(done)
+    })
+
+    it('Should be error if price is not a number', (done) => {
+      const newUnit = {
+        name: 'Honda Civic Type-R',
+        brand: 'Honda',
+        type: 'Civic Type-R',
+        year: '2020',
+        category: 'Mobil Pribadi',
+        price: 'five hundred dollars',
+        location: 'Jakarta'
+      }
+
+      chai.request(app)
+        .post('/units/add')
+        .set('access_token', localStorage.accessToken)
+        .field('name', newUnit.name)
+        .field('brand', newUnit.brand)
+        .field('type', newUnit.type)
+        .field('year', newUnit.year)
+        .field('category', newUnit.category)
+        .field('price', newUnit.price)
+        .field('location', newUnit.location)
+        .attach('image-unit', fs.readFileSync(path.join(__dirname + '/img/car-test.jpg')), 'car-test.jpg')
+        .then(res => {
+          const { body } = res
+          expect(res).to.have.status(400)
+          expect(body).to.be.an('object')
+          expect(body).to.have.all.keys('message')
+          expect(body).to.have.property('message', 'Please double check your input and try again...')
+          done()
+        })
+        .catch(done)
+    })
+
+    it('Should be error if access_token is not a valid JWT Token', (done) => {
+      const newUnit = {
+        name: 'Honda Civic Type-R',
+        brand: 'Honda',
+        type: 'Civic Type-R',
+        year: '2020',
+        category: 'Car',
+        price: '90000000',
+        location: 'Jakarta'
+      }
+
+      chai.request(app)
+        .post('/units/add')
+        .set('access_token', '44219aaaaa2929')
+        .field('name', newUnit.name)
+        .field('brand', newUnit.brand)
+        .field('type', newUnit.type)
+        .field('year', newUnit.year)
+        .field('category', newUnit.category)
+        .field('price', newUnit.price)
+        .field('location', newUnit.location)
+        .attach('image-unit', fs.readFileSync(path.join(__dirname + '/img/car-test.jpg')), 'car-test.jpg')
+        .then(res => {
+          const { body } = res
+          expect(res).to.have.status(401)
+          expect(body).to.be.an('object')
+          expect(body).to.have.all.keys('message')
+          expect(body).to.have.property('message', 'Invalid Access Token')
           done()
         })
         .catch(done)
@@ -327,12 +499,20 @@ describe('Vendor Input Data Unit', () => {
         type: 'Civic Type-R',
         year: '2020',
         category: 'Car',
-        imageUrl: 'https://imgx.gridoto.com/crop/0x0:0x0/700x465/filters:watermark(file/2017/gridoto/img/watermark_otoseken.png,5,5,60)/photo/2020/02/13/456583938.jpeg'
+        price: '90000000',
+        location: 'Jakarta'
       }
 
       chai.request(app)
         .post('/units/add')
-        .send(newUnit)
+        .field('name', newUnit.name)
+        .field('brand', newUnit.brand)
+        .field('type', newUnit.type)
+        .field('year', newUnit.year)
+        .field('category', newUnit.category)
+        .field('price', newUnit.price)
+        .field('location', newUnit.location)
+        .attach('image-unit', fs.readFileSync(path.join(__dirname + '/img/car-test.jpg')), 'car-test.jpg')
         .then(res => {
           const { body } = res
           expect(res).to.have.status(401)
@@ -346,7 +526,7 @@ describe('Vendor Input Data Unit', () => {
   })
 })
 
-// * Vendor Input Data Unit
+// * Vendor Edit Data Unit
 describe("Test endpoint edit data", () => {
   describe('PUT /units/:unitId', () => {
     it('Test success edit', (done) => {
@@ -360,7 +540,9 @@ describe("Test endpoint edit data", () => {
           type: 'Automatic',
           year: '2019',
           category: 'Mobil Penumpang',
-          imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg'
+          imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg',
+          location: 'Jakarta',
+          price: '90000000'
         })
         .then(res => {
           const { body, status } = res
@@ -383,7 +565,9 @@ describe("Test endpoint edit data", () => {
         type: 'Automatic',
         year: '2019',
         category: 'Mobil Penumpang',
-        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg'
+        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg',
+        location: 'Jakarta',
+        price: '90000000'
       })
       .then( res => {
         const { body, status } = res
@@ -406,7 +590,9 @@ describe("Test endpoint edit data", () => {
         type: 'Automatic',
         year: '2019',
         category: 'Mobil Penumpang',
-        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg'
+        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg',
+        location: 'Jakarta',
+        price: '90000000'
       })
       .then( res => {
         const { body, status } = res
@@ -429,7 +615,9 @@ describe("Test endpoint edit data", () => {
         type: '',
         year: '2019',
         category: 'Mobil Penumpang',
-        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg'
+        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg',
+        location: 'Jakarta',
+        price: '90000000'
       })
       .then( res => {
         const { body, status } = res
@@ -452,7 +640,9 @@ describe("Test endpoint edit data", () => {
         type: 'Automatic',
         year: '',
         category: 'Mobil Penumpang',
-        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg'
+        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg',
+        location: 'Jakarta',
+        price: '90000000'
       })
       .then( res => {
         const { body, status } = res
@@ -475,7 +665,9 @@ describe("Test endpoint edit data", () => {
         type: 'Automatic',
         year: '2019',
         category: '',
-        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg'
+        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg',
+        location: 'Jakarta',
+        price: '90000000'
       })
       .then( res => {
         const { body, status } = res
@@ -487,7 +679,7 @@ describe("Test endpoint edit data", () => {
       .catch(done)
     })
 
-    it('Test edit but imgaeUrl is empty', (done) => {
+    it('Test edit but imageUrl is empty', (done) => {
       chai
       .request(app)
       .put(`/units/${unitId}`)
@@ -521,7 +713,9 @@ describe("Test endpoint edit data", () => {
         type: 'Automatic',
         year: '2019',
         category: 'Mobil penumpang',
-        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg'
+        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg',
+        location: 'Jakarta',
+        price: '90000000'
       })
       .then( res => {
         const { body, status } = res
@@ -543,7 +737,9 @@ describe("Test endpoint edit data", () => {
         type: 'Automatic',
         year: '2019',
         category: 'Mobil penumpang',
-        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg'
+        imageUrl: 'https://d2pa5gi5n2e1an.cloudfront.net/id/images/car_models/Mitsubishi_Xpander/1/exterior/exterior_2L_1.jpg',
+        location: 'Jakarta',
+        price: '90000000'
       })
       .then( res => {
         const { body, status } = res
@@ -553,6 +749,80 @@ describe("Test endpoint edit data", () => {
         done()
       })
       .catch(done)
+    })
+  })
+})
+
+describe('Vendor GET Unit', () => {
+  describe('GET /units', () => {
+    it('Should be GET All Vendor Units', (done) => {
+      chai.request(app)
+        .get('/units')
+        .set('access_token', localStorage.accessToken)
+        .then(res => {
+          const { body, status } = res
+          expect(status).to.equal(200)
+          expect(body).to.be.an('array')
+          done()
+        })
+        .catch(done)
+    })
+  })
+
+  describe('GET /units/:unitId', () => {
+    it('Should be GET one Vendor Unit', (done) => {
+      chai.request(app)
+        .get(`/units/${unitId}`)
+        .set('access_token', localStorage.accessToken)
+        .then(res => {
+          const { body, status } = res
+          expect(status).to.equal(200)
+          expect(body).to.be.an('object')
+          expect(body).to.have.all.keys('_id', 'name', 'brand', 'type', 'year', 'category', 'imageUrl', 'vendor', 'price', 'location', 'createdAt', 'updatedAt', '__v')
+          expect(body).to.have.property('_id')
+          expect(body).to.have.property('name')
+          expect(body).to.have.property('brand')
+          expect(body).to.have.property('type')
+          expect(body).to.have.property('year')
+          expect(body).to.have.property('category')
+          expect(body).to.have.property('imageUrl')
+          expect(body).to.have.property('vendor')
+          expect(body).to.have.property('createdAt')
+          expect(body).to.have.property('updatedAt')
+          expect(body).to.have.property('__v')
+          done()
+        })
+        .catch(done)
+    })
+
+    it('Should be error if unitId is not found', (done) => {
+      chai.request(app)
+        .get(`/units/5fd619e21b639001ce2cd57f`)
+        .set('access_token', localStorage.accessToken)
+        .then(res => {
+          const { body, status } = res
+          expect(status).to.equal(404)
+          expect(body).to.be.an('object')
+          expect(body).to.have.all.keys('message')
+          expect(body).to.have.property('message', 'Unit not found')
+          done()
+        })
+        .catch(done)
+    })
+
+    it('Should be error if unitId is not a valid objectId', (done) => {
+      chai.request(app)
+        .get(`/units/412421aaa`)
+        .set('access_token', localStorage.accessToken)
+        .then(res => {
+          const { body, status } = res
+          expect(status).to.equal(404)
+          expect(body).to.be.an('object')
+          expect(body).to.have.all.keys('message')
+          expect(body).to.have.property('message', 'Unit not found')
+          done()
+        })
+        .catch(done)
     })
   })
 })

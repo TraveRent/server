@@ -9,7 +9,7 @@ const userProfileSchema = new Schema({
   phoneNumber: {
     type: String,
     required: [true, 'Phone number cannot be empty'],
-    validate: [isMobilePhone, 'Invalid Phone Number']
+    validate: [isMobilePhone, 'Input should be a phone number']
   },
   email: {
     type: String,

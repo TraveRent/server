@@ -2,10 +2,11 @@ const router = require('express').Router()
 const { UnitController } = require('../controllers')
 
 const { authentication, authorization } = require('../middlewares')
+const { uploadVendorUnitMiddleware } = require('../aws')
 
 router.use(authentication)
 router.get('/', UnitController.getAllVendorUnit)
-router.post('/add', UnitController.postAddVendorUnit)
+router.post('/add', uploadVendorUnitMiddleware, UnitController.postAddVendorUnit)
 router.get('/:unitId', UnitController.getVendorUnitById)
 
 router.use('/:unitId', authorization)
