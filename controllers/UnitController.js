@@ -43,8 +43,8 @@ module.exports = class UnitController {
   }
 
   static async getAllVendorUnit(req, res, next) {
-    const { _id } = req.whoAmI
-    const allUnits = await Unit.find({ vendor: _id }).populate('vendor')
+    // const { _id } = req.whoAmI
+    const allUnits = await Unit.find({}).populate('vendor')
     const results = []
     allUnits.forEach(unit => {
       unit.vendor = { _id: unit.vendor._id, email: unit.vendor.email }

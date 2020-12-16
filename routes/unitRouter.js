@@ -4,8 +4,8 @@ const { UnitController } = require('../controllers')
 const { authentication, authorization } = require('../middlewares')
 const { uploadVendorUnitMiddleware } = require('../aws')
 
-router.use(authentication)
 router.get('/', UnitController.getAllVendorUnit)
+router.use(authentication)
 router.post('/add', uploadVendorUnitMiddleware, UnitController.postAddVendorUnit)
 router.get('/:unitId', UnitController.getVendorUnitById)
 
