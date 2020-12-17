@@ -20,10 +20,10 @@ mongoose.connect(process.env.MONGODB_ATLAS_URI, { useNewUrlParser: true, useUnif
     console.log('mongoose connected into AWS MongoDB Atlas Main Cluster')
 
     // // * Listen the app
-    // const PORT = +process.env.PORT
-    // app.listen(PORT, () => {
-    //   console.log('Server is live at http://localhost:' + PORT)
-    // })
+    const PORT = +process.env.PORT
+    app.listen(PORT, () => {
+      console.log('Server is live at http://localhost:' + PORT)
+    })
   })
   .catch(console.error)
 
