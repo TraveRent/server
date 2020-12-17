@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 require("dotenv").config();
 const express = require("express");
 const app = express();
+=======
+require('dotenv').config()
+const express = require('express')
+const app = express()
+>>>>>>> 1b252cf5b790b84d34e5fcc15a132a5c868ead73
 
 const mongoose = require("mongoose");
 const cors = require("cors");
