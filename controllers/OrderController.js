@@ -1,4 +1,5 @@
 const { Order } = require('../models')
+const { sendEmail } = require('../helpers')
 
 class OrderController {
   static async saveOrder(req, res, next) {
@@ -14,6 +15,14 @@ class OrderController {
         userProfile: profileId
       })
       const createdOrder = await newOrder.save()
+      // * If reach this line, it means the order has been successfully saved into db
+      sendEmail(
+        await Order.findById(createdOrder._id)
+        .populate('vendor', '_id firstName lastName email')
+        .populate('user', '_id firstName lastName email')
+        .populate('unit', '_id name brand year price')
+        .populate('userProfile', '_id fullName phoneNumber email imageKTP imageSIM')
+      )
       res.status(201).json(createdOrder)
     } catch (error) {
       next(error)
