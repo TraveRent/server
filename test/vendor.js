@@ -188,8 +188,10 @@ describe('Vendor Login', () => {
           const { body } = res
           expect(res).to.have.status(200)
           expect(body).to.be.an('object')
-          expect(body).to.have.all.keys('accessToken')
+          expect(body).to.have.all.keys('_id', 'accessToken', 'fullName')
+          expect(body).to.have.property('_id')
           expect(body).to.have.property('accessToken')
+          expect(body).to.have.property('fullName')
           done()
         })
         .catch(done)
