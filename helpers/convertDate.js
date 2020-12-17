@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 module.exports = (date) => {
   let year = date.getFullYear()
   let month = date.getMonth()+1

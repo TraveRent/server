@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 require('dotenv').config()
 const { createTransport } = require('nodemailer')
 const convertDate = require('./convertDate')
@@ -104,8 +105,6 @@ module.exports = (data) => {
       </div>
     `
   }
-
-  (mailOptionsVendor, '//as');
 
   const mailOptionsUser = {
     from: '"TraveRent" <vehiclerentalh8@gmail.com>',
