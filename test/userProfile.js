@@ -20,7 +20,9 @@ const {
 // * Temporary data
 let userId = ''
 let localStorage = {
-  accessToken: ''
+  accessToken: '',
+  expiredToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQ5ZjkxYmFmZjY4NDhlYmYwNGU1ZTQiLCJlbWFpbCI6ImFrYmFyQG1haWwuY29tIiwiaWF0IjoxNjA4MTIwNjA0fQ.d5fh6_MHIbcmtZWYVHiVM4KRiXXC94O-sB0tWOzrHl0',
+  invalidSecretToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQ5ZjViYzQ5YzE0NjhjYTc2ZWVjY2QiLCJlbWFpbCI6ImFrYmFyQG1haWwuY29tIiwiaWF0IjoxNjA4MTE5NzQxfQ.HiCADWzsu0IhNE9-bAyQTbJSI-bpXLxvThMOyFwlQSQ'
 }
 
 // * Before
@@ -219,7 +221,7 @@ describe('UserProfile Add', () => {
         .catch(done)
     })
 
-    it('Should be error if imageKTP is empty', (done) => {
+    it('Should be error if imageSIM is empty', (done) => {
       const newUserProfile = {
         fullName: 'Muhammad Akbar',
         phoneNumber: '+6281318356925',
@@ -232,7 +234,7 @@ describe('UserProfile Add', () => {
         .field('fullName', newUserProfile.fullName)
         .field('phoneNumber', newUserProfile.phoneNumber)
         .field('email', newUserProfile.email)
-        .attach('imageSIM', fs.readFileSync(path.join(__dirname + '/img/sim.jpg')), 'sim.jpg')
+        .attach('imageKTP', fs.readFileSync(path.join(__dirname + '/img/ktp.jpeg')), 'ktp.jpeg')
         .then(res => {
           const { body } = res
           expect(res).to.have.status(400)
@@ -371,9 +373,87 @@ describe('UserProfile Add', () => {
         .catch(done)
     })
 
+    it('Should be error if access_token is not a valid JWT Token', (done) => {
+      const newUserProfile = {
+        fullName: 'Muhammad Akbar',
+        phoneNumber: '+6281318356925',
+        email: 'akbarhabiby@icloud.com'
+      }
+
+      chai.request(app)
+        .post('/profiles')
+        .set('access_token', '4kkjkdd33')
+        .field('fullName', newUserProfile.fullName)
+        .field('phoneNumber', newUserProfile.phoneNumber)
+        .field('email', newUserProfile.email)
+        .attach('imageKTP', fs.readFileSync(path.join(__dirname + '/img/ktp.jpeg')), 'ktp.jpeg')
+        .attach('imageSIM', fs.readFileSync(path.join(__dirname + '/img/sim.jpg')), 'sim.jpg')
+        .then(res => {
+          const { body } = res
+          expect(res).to.have.status(401)
+          expect(body).to.be.an('object')
+          expect(body).to.have.all.keys('message')
+          expect(body).to.have.property('message', 'Invalid Access Token')
+          done()
+        })
+        .catch(done)
+    })
+
+    it('Should be error if user sent invalid JWT Signature', (done) => {
+      const newUserProfile = {
+        fullName: 'Muhammad Akbar',
+        phoneNumber: '+6281318356925',
+        email: 'akbarhabiby@icloud.com'
+      }
+
+      chai.request(app)
+        .post('/profiles')
+        .set('access_token', localStorage.invalidSecretToken)
+        .field('fullName', newUserProfile.fullName)
+        .field('phoneNumber', newUserProfile.phoneNumber)
+        .field('email', newUserProfile.email)
+        .attach('imageKTP', fs.readFileSync(path.join(__dirname + '/img/ktp.jpeg')), 'ktp.jpeg')
+        .attach('imageSIM', fs.readFileSync(path.join(__dirname + '/img/sim.jpg')), 'sim.jpg')
+        .then(res => {
+          const { body } = res
+          expect(res).to.have.status(401)
+          expect(body).to.be.an('object')
+          expect(body).to.have.all.keys('message')
+          expect(body).to.have.property('message', 'invalid signature')
+          done()
+        })
+        .catch(done)
+    })
+
+    it('Should be error if user sent deleted User Token', (done) => {
+      const newUserProfile = {
+        fullName: 'Muhammad Akbar',
+        phoneNumber: '+6281318356925',
+        email: 'akbarhabiby@icloud.com'
+      }
+
+      chai.request(app)
+        .post('/profiles')
+        .set('access_token', localStorage.expiredToken)
+        .field('fullName', newUserProfile.fullName)
+        .field('phoneNumber', newUserProfile.phoneNumber)
+        .field('email', newUserProfile.email)
+        .attach('imageKTP', fs.readFileSync(path.join(__dirname + '/img/ktp.jpeg')), 'ktp.jpeg')
+        .attach('imageSIM', fs.readFileSync(path.join(__dirname + '/img/sim.jpg')), 'sim.jpg')
+        .then(res => {
+          const { body } = res
+          expect(res).to.have.status(401)
+          expect(body).to.be.an('object')
+          expect(body).to.have.all.keys('message')
+          expect(body).to.have.property('message', 'Unauthorized')
+          done()
+        })
+        .catch(done)
+    })
+
     it('Should be error if user is not login', (done) => {
       const newUserProfile = {
-        fullName: '',
+        fullName: 'Muhammad Akbar',
         phoneNumber: '+6281318356925',
         email: 'akbarhabiby@icloud.com'
       }

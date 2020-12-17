@@ -8,18 +8,16 @@ const { Vendor } = require('../models')
 
 module.exports = async (req, res, next) => {
   try {
-    const { access_token } = req.headers
+    const { vendor_access_token } = req.headers
 
-    if(!access_token) throw new Error('Unauthorized')
-    if(!isJWT(access_token)) throw new Error('Invalid Access Token')
+    if(!vendor_access_token) throw new Error('Unauthorized')
+    if(!isJWT(vendor_access_token)) throw new Error('Invalid Access Token')
 
-    const loggedIn = jwtVerify(access_token)
-    if(!loggedIn) throw new Error('Unauthorized') // ! Coverage 17-21
+    const loggedIn = jwtVerify(vendor_access_token)
 
     const checkVendor = await Vendor.findById(loggedIn._id)
-
     if(!checkVendor) throw new Error('Unauthorized')
-    req.whoAmI = jwtVerify(access_token)
+    req.whoAmI = loggedIn
     next()
   } catch (err) {
     next(err)

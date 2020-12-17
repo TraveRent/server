@@ -9,7 +9,7 @@
     "test:user": "mocha ./test/user.js --exit",
     "test:vendor": "mocha ./test/vendor.js --exit",
     "dev": "nodemon app.js",
-    "start": "node app.js",
+    "start": "node server.js",
     "coverage": "nyc npm run test"
   },
   "repository": {
@@ -31,6 +31,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "greenlock-express": "^4.0.3",
     "jsonwebtoken": "^8.5.1",
     "mocha": "^8.2.1",
     "mongoose": "^5.11.7",

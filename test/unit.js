@@ -22,7 +22,9 @@ let vendorId = ''
 let unitId = ''
 let localStorage = {
   accessToken: '',
-  randomToken: ''
+  randomToken: '',
+  expiredToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQ5ZjkxYmFmZjY4NDhlYmYwNGU1ZTQiLCJlbWFpbCI6ImFrYmFyQG1haWwuY29tIiwiaWF0IjoxNjA4MTIwNjA0fQ.d5fh6_MHIbcmtZWYVHiVM4KRiXXC94O-sB0tWOzrHl0',
+  invalidSecretToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmQ5ZjViYzQ5YzE0NjhjYTc2ZWVjY2QiLCJlbWFpbCI6ImFrYmFyQG1haWwuY29tIiwiaWF0IjoxNjA4MTE5NzQxfQ.HiCADWzsu0IhNE9-bAyQTbJSI-bpXLxvThMOyFwlQSQ'
 }
 
 // * Create a new vendor and login
@@ -98,7 +100,7 @@ describe('Vendor Input Data Unit', () => {
 
       chai.request(app)
         .post('/units/add')
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .field('name', newUnit.name)
         .field('brand', newUnit.brand)
         .field('type', newUnit.type)
@@ -143,7 +145,7 @@ describe('Vendor Input Data Unit', () => {
 
       chai.request(app)
         .post('/units/add')
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .field('name', newUnit.name)
         .field('brand', newUnit.brand)
         .field('type', newUnit.type)
@@ -176,7 +178,7 @@ describe('Vendor Input Data Unit', () => {
 
       chai.request(app)
         .post('/units/add')
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .field('name', newUnit.name)
         .field('brand', newUnit.brand)
         .field('type', newUnit.type)
@@ -209,7 +211,7 @@ describe('Vendor Input Data Unit', () => {
 
       chai.request(app)
         .post('/units/add')
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .field('name', newUnit.name)
         .field('brand', newUnit.brand)
         .field('type', newUnit.type)
@@ -242,7 +244,7 @@ describe('Vendor Input Data Unit', () => {
 
       chai.request(app)
         .post('/units/add')
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .field('name', newUnit.name)
         .field('brand', newUnit.brand)
         .field('type', newUnit.type)
@@ -275,7 +277,7 @@ describe('Vendor Input Data Unit', () => {
 
       chai.request(app)
         .post('/units/add')
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .field('name', newUnit.name)
         .field('brand', newUnit.brand)
         .field('type', newUnit.type)
@@ -308,7 +310,7 @@ describe('Vendor Input Data Unit', () => {
 
       chai.request(app)
         .post('/units/add')
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .field('name', newUnit.name)
         .field('brand', newUnit.brand)
         .field('type', newUnit.type)
@@ -341,7 +343,7 @@ describe('Vendor Input Data Unit', () => {
 
       chai.request(app)
         .post('/units/add')
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .field('name', newUnit.name)
         .field('brand', newUnit.brand)
         .field('type', newUnit.type)
@@ -373,7 +375,7 @@ describe('Vendor Input Data Unit', () => {
 
       chai.request(app)
         .post('/units/add')
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .field('name', newUnit.name)
         .field('brand', newUnit.brand)
         .field('type', newUnit.type)
@@ -406,7 +408,7 @@ describe('Vendor Input Data Unit', () => {
 
       chai.request(app)
         .post('/units/add')
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .field('name', newUnit.name)
         .field('brand', newUnit.brand)
         .field('type', newUnit.type)
@@ -439,7 +441,7 @@ describe('Vendor Input Data Unit', () => {
 
       chai.request(app)
         .post('/units/add')
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .field('name', newUnit.name)
         .field('brand', newUnit.brand)
         .field('type', newUnit.type)
@@ -459,7 +461,7 @@ describe('Vendor Input Data Unit', () => {
         .catch(done)
     })
 
-    it('Should be error if access_token is not a valid JWT Token', (done) => {
+    it('Should be error if vendor_access_token is not a valid JWT Token', (done) => {
       const newUnit = {
         name: 'Honda Civic Type-R',
         brand: 'Honda',
@@ -472,7 +474,7 @@ describe('Vendor Input Data Unit', () => {
 
       chai.request(app)
         .post('/units/add')
-        .set('access_token', '44219aaaaa2929')
+        .set('vendor_access_token', '44219aaaaa2929')
         .field('name', newUnit.name)
         .field('brand', newUnit.brand)
         .field('type', newUnit.type)
@@ -487,6 +489,72 @@ describe('Vendor Input Data Unit', () => {
           expect(body).to.be.an('object')
           expect(body).to.have.all.keys('message')
           expect(body).to.have.property('message', 'Invalid Access Token')
+          done()
+        })
+        .catch(done)
+    })
+
+    it('Should be error if user sent invalid JWT Signature', (done) => {
+      const newUnit = {
+        name: 'Honda Civic Type-R',
+        brand: 'Honda',
+        type: 'Civic Type-R',
+        year: '2020',
+        category: 'Car',
+        price: '90000000',
+        location: 'Jakarta'
+      }
+
+      chai.request(app)
+        .post('/units/add')
+        .set('vendor_access_token', localStorage.invalidSecretToken)
+        .field('name', newUnit.name)
+        .field('brand', newUnit.brand)
+        .field('type', newUnit.type)
+        .field('year', newUnit.year)
+        .field('category', newUnit.category)
+        .field('price', newUnit.price)
+        .field('location', newUnit.location)
+        .attach('image-unit', fs.readFileSync(path.join(__dirname + '/img/car-test.jpg')), 'car-test.jpg')
+        .then(res => {
+          const { body } = res
+          expect(res).to.have.status(401)
+          expect(body).to.be.an('object')
+          expect(body).to.have.all.keys('message')
+          expect(body).to.have.property('message', 'invalid signature')
+          done()
+        })
+        .catch(done)
+    })
+
+    it('Should be error if user sent deleted Vendor Token', (done) => {
+      const newUnit = {
+        name: 'Honda Civic Type-R',
+        brand: 'Honda',
+        type: 'Civic Type-R',
+        year: '2020',
+        category: 'Car',
+        price: '90000000',
+        location: 'Jakarta'
+      }
+
+      chai.request(app)
+        .post('/units/add')
+        .set('vendor_access_token', localStorage.expiredToken)
+        .field('name', newUnit.name)
+        .field('brand', newUnit.brand)
+        .field('type', newUnit.type)
+        .field('year', newUnit.year)
+        .field('category', newUnit.category)
+        .field('price', newUnit.price)
+        .field('location', newUnit.location)
+        .attach('image-unit', fs.readFileSync(path.join(__dirname + '/img/car-test.jpg')), 'car-test.jpg')
+        .then(res => {
+          const { body } = res
+          expect(res).to.have.status(401)
+          expect(body).to.be.an('object')
+          expect(body).to.have.all.keys('message')
+          expect(body).to.have.property('message', 'Unauthorized')
           done()
         })
         .catch(done)
@@ -533,7 +601,7 @@ describe("Test endpoint edit data", () => {
       chai
         .request(app)
         .put(`/units/${unitId}`)
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .send({
           name: 'Mitsubishi Xpander Sport',
           brand: 'Mitsubishi',
@@ -558,7 +626,7 @@ describe("Test endpoint edit data", () => {
       chai
       .request(app)
       .put(`/units/${unitId}`)
-      .set('access_token', localStorage.accessToken)
+      .set('vendor_access_token', localStorage.accessToken)
       .send({
         name: '',
         brand: 'Mitsubishi',
@@ -583,7 +651,7 @@ describe("Test endpoint edit data", () => {
       chai
       .request(app)
       .put(`/units/${unitId}`)
-      .set('access_token', localStorage.accessToken)
+      .set('vendor_access_token', localStorage.accessToken)
       .send({
         name: 'Mitsubishi Xpander Sport',
         brand: '',
@@ -608,7 +676,7 @@ describe("Test endpoint edit data", () => {
       chai
       .request(app)
       .put(`/units/${unitId}`)
-      .set('access_token', localStorage.accessToken)
+      .set('vendor_access_token', localStorage.accessToken)
       .send({
         name: 'Mitsubishi Xpander Sport',
         brand: 'Mitsubishi',
@@ -633,7 +701,7 @@ describe("Test endpoint edit data", () => {
       chai
       .request(app)
       .put(`/units/${unitId}`)
-      .set('access_token', localStorage.accessToken)
+      .set('vendor_access_token', localStorage.accessToken)
       .send({
         name: 'Mitsubishi Xpander Sport',
         brand: 'Mitsubishi',
@@ -658,7 +726,7 @@ describe("Test endpoint edit data", () => {
       chai
       .request(app)
       .put(`/units/${unitId}`)
-      .set('access_token', localStorage.accessToken)
+      .set('vendor_access_token', localStorage.accessToken)
       .send({
         name: 'Mitsubishi Xpander Sport',
         brand: 'Mitsubishi',
@@ -683,7 +751,7 @@ describe("Test endpoint edit data", () => {
       chai
       .request(app)
       .put(`/units/${unitId}`)
-      .set('access_token', localStorage.accessToken)
+      .set('vendor_access_token', localStorage.accessToken)
       .send({
         name: 'Mitsubishi Xpander Sport',
         brand: 'Mitsubishi',
@@ -706,7 +774,7 @@ describe("Test endpoint edit data", () => {
       chai
       .request(app)
       .put(`/units/${unitId}`)
-      .set('access_token', localStorage.randomToken)
+      .set('vendor_access_token', localStorage.randomToken)
       .send({
         name: 'Mitsubishi Xpander Sport',
         brand: 'Mitsubishi',
@@ -758,7 +826,7 @@ describe('Vendor GET Unit', () => {
     it('Should be GET All Vendor Units', (done) => {
       chai.request(app)
         .get('/units')
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .then(res => {
           const { body, status } = res
           expect(status).to.equal(200)
@@ -773,7 +841,7 @@ describe('Vendor GET Unit', () => {
     it('Should be GET one Vendor Unit', (done) => {
       chai.request(app)
         .get(`/units/${unitId}`)
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .then(res => {
           const { body, status } = res
           expect(status).to.equal(200)
@@ -798,7 +866,7 @@ describe('Vendor GET Unit', () => {
     it('Should be error if unitId is not found', (done) => {
       chai.request(app)
         .get(`/units/5fd619e21b639001ce2cd57f`)
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .then(res => {
           const { body, status } = res
           expect(status).to.equal(404)
@@ -813,13 +881,13 @@ describe('Vendor GET Unit', () => {
     it('Should be error if unitId is not a valid objectId', (done) => {
       chai.request(app)
         .get(`/units/412421aaa`)
-        .set('access_token', localStorage.accessToken)
+        .set('vendor_access_token', localStorage.accessToken)
         .then(res => {
           const { body, status } = res
           expect(status).to.equal(404)
           expect(body).to.be.an('object')
           expect(body).to.have.all.keys('message')
-          expect(body).to.have.property('message', 'Unit not found')
+          expect(body).to.have.property('message', 'Data Target not found')
           done()
         })
         .catch(done)
@@ -834,7 +902,7 @@ describe("Test endpoint delete data", () => {
       chai
       .request(app)
       .delete(`/units/5fd71bda92d52a22b9de4b1f`)
-      .set('access_token', localStorage.accessToken)
+      .set('vendor_access_token', localStorage.accessToken)
       .then(res => {
         const { body, status } = res
         expect(status).to.equal(404)
@@ -849,7 +917,7 @@ describe("Test endpoint delete data", () => {
       chai
       .request(app)
       .delete(`/units/${unitId}`)
-      .set('access_token', localStorage.randomToken)
+      .set('vendor_access_token', localStorage.randomToken)
       .then(res => {
         const { body, status } = res
         expect(status).to.equal(401)
@@ -877,7 +945,7 @@ describe("Test endpoint delete data", () => {
       chai
       .request(app)
       .delete(`/units/${unitId}`)
-      .set('access_token', localStorage.accessToken)
+      .set('vendor_access_token', localStorage.accessToken)
       .then(res => {
         const { body, status } = res
         expect(status).to.equal(200)

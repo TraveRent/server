@@ -16,7 +16,8 @@ module.exports = (err, req, res, next) => {
     status = 400
   }
 
-  if(err.message) { // ! Coverage ????
+  /* istanbul ignore next */
+  if(err.message) {
     switch(err.message) {
       case 'Wrong email or password':
         message = err.message
@@ -62,11 +63,15 @@ module.exports = (err, req, res, next) => {
         message = err.message
         status = 400
         break
+      case 'invalid signature':
+        message = err.message
+        status = 401
+        break
     }
   }
 
   if(err.message.includes('Cast to ObjectId failed')) {
-    message = 'Unit not found'
+    message = 'Data Target not found'
     status = 404
   }
 

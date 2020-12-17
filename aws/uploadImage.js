@@ -9,11 +9,7 @@ const s3 = new AWS.S3({
   }
 })
 
-const storage = multer.memoryStorage({
-  destination: function (req, file, callback) {
-    callback(null, '') // ! Coverage ???
-  }
-})
+const storage = multer.memoryStorage()
 
 const uploadUserProfileMiddleware = multer({
   storage: storage,
@@ -48,7 +44,8 @@ module.exports = {
         Body: buffer,
         ContentType: mimetype
       }, (err, { Location }) => {
-        if(err) return reject(new Error('Failed to upload image'))
+        /* istanbul ignore next */
+        if(err) return reject(new Error('Failed to upload image')) // * Never reach this case
         resolve(Location)
       })
     })

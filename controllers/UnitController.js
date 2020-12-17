@@ -34,13 +34,32 @@ module.exports = class UnitController {
 
   static async getAllVendorUnit(req, res, next) {
     // const { _id } = req.whoAmI
-    const allUnits = await Unit.find({}).populate("vendor");
-    const results = [];
+    const allUnits = await Unit.find({}).populate(
+      "vendor",
+      "_id email firstName lastName"
+    );
+    const arr = [];
     allUnits.forEach((unit) => {
-      unit.vendor = { _id: unit.vendor._id, email: unit.vendor.email };
-      results.push(unit);
+      arr.push({
+        _id: unit._id,
+        name: unit.name,
+        brand: unit.brand,
+        type: unit.type,
+        year: unit.year,
+        category: unit.category,
+        imageUrl: unit.imageUrl,
+        location: unit.location,
+        price: unit.price,
+        vendor: {
+          _id: unit.vendor._id,
+          fullName: unit.vendor.firstName + " " + unit.vendor.lastName,
+          email: unit.vendor.email,
+        },
+        createdAt: unit.createdAt,
+        updatedAt: unit.updatedAt,
+      });
     });
-    res.status(200).json(results);
+    res.status(200).json(arr);
 
     // ! Coverage
     // try {
